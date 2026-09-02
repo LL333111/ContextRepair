@@ -1,0 +1,169 @@
+ContextRepair: omitted slow worktree status diagnostic
+b9cf764be6 Fixed #29517 -- Added support for SQLite column check constraints on positive integer fields.
+ContextRepair: omitted slow worktree diff diagnostic
+running install
+running bdist_egg
+running egg_info
+creating Django.egg-info
+writing dependency_links to Django.egg-info/dependency_links.txt
+writing Django.egg-info/PKG-INFO
+writing entry points to Django.egg-info/entry_points.txt
+writing top-level names to Django.egg-info/top_level.txt
+writing requirements to Django.egg-info/requires.txt
+writing manifest file 'Django.egg-info/SOURCES.txt'
+reading manifest file 'Django.egg-info/SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+writing manifest file 'Django.egg-info/SOURCES.txt'
+installing library code to build/bdist.linux-x86_64/egg
+running install_lib
+running build_py
+creating build
+creating build/lib
+creating build/lib/django
+copying django/shortcuts.py -> build/lib/django
+copying django/__init__.py -> build/lib/django
+copying django/__main__.py -> build/lib/django
+creating build/lib/django/apps
+copying django/apps/config.py -> build/lib/django/apps
+copying django/apps/registry.py -> build/lib/django/apps
+copying django/apps/__init__.py -> build/lib/django/apps
+creating build/lib/django/conf
+copying django/conf/global_settings.py -> build/lib/django/conf
+copying django/conf/__init__.py -> build/lib/django/conf
+creating build/lib/django/contrib
+copying django/contrib/__init__.py -> build/lib/django/contrib
+creating build/lib/django/core
+copying django/core/exceptions.py -> build/lib/django/core
+copying django/core/paginator.py -> build/lib/django/core
+copying django/core/signals.py -> build/lib/django/core
+copying django/core/signing.py -> build/lib/django/core
+copying django/core/validators.py -> build/lib/django/core
+copying django/core/wsgi.py -> build/lib/django/core
+copying django/core/__init__.py -> build/lib/django/core
+creating build/lib/django/db
+copying django/db/transaction.py -> build/lib/django/db
+copying django/db/utils.py -> build/lib/django/db
+copying django/db/__init__.py -> build/lib/django/db
+creating build/lib/django/dispatch
+copying django/dispatch/dispatcher.py -> build/lib/django/dispatch
+copying django/dispatch/__init__.py -> build/lib/django/dispatch
+creating build/lib/django/forms
+copying django/forms/boundfield.py -> build/lib/django/forms
+copying django/forms/fields.py -> build/lib/django/forms
+copying django/forms/forms.py -> build/lib/django/forms
+copying django/forms/formsets.py -> build/lib/django/forms
+copying django/forms/models.py -> build/lib/django/forms
+copying django/forms/renderers.py -> build/lib/django/forms
+copying django/forms/utils.py -> build/lib/django/forms
+copying django/forms/widgets.py -> build/lib/django/forms
+copying django/forms/__init__.py -> build/lib/django/forms
+creating build/lib/django/http
+copying django/http/cookie.py -> build/lib/django/http
+copying django/http/multipartparser.py -> build/lib/django/http
+copying django/http/request.py -> build/lib/django/http
+copying django/http/response.py -> build/lib/django/http
+copying django/http/__init__.py -> build/lib/django/http
+creating build/lib/django/middleware
+copying django/middleware/cache.py -> build/lib/django/middleware
+copying django/middleware/clickjacking.py -> build/lib/django/middleware
+copying django/middleware/common.py -> build/lib/django/middleware
+copying django/middleware/csrf.py -> build/lib/django/middleware
+copying django/middleware/gzip.py -> build/lib/django/middleware
+copying django/middleware/http.py -> build/lib/django/middleware
+copying django/middleware/locale.py -> build/lib/django/middleware
+copying django/middleware/security.py -> build/lib/django/middleware
+copying django/middleware/__init__.py -> build/lib/django/middleware
+creating build/lib/django/template
+copying django/template/base.py -> build/lib/django/template
+copying django/template/context.py -> build/lib/django/template
+copying django/template/context_processors.py -> build/lib/django/template
+copying django/template/defaultfilters.py -> build/lib/django/template
+copying django/template/defaulttags.py -> build/lib/django/template
+copying django/template/engine.py -> build/lib/django/template
+copying django/template/exceptions.py -> build/lib/django/template
+copying django/template/library.py -> build/lib/django/template
+copying django/template/loader.py -> build/lib/django/template
+copying django/template/loader_tags.py -> build/lib/django/template
+copying django/template/response.py -> build/lib/django/template
+copying django/template/smartif.py -> build/lib/django/template
+copying django/template/utils.py -> build/lib/django/template
+copying django/template/__init__.py -> build/lib/django/template
+creating build/lib/django/templatetags
+copying django/templatetags/cache.py -> build/lib/django/templatetags
+copying django/templatetags/i18n.py -> build/lib/django/templatetags
+copying django/templatetags/l10n.py -> build/lib/django/templatetags
+copying django/templatetags/static.py -> build/lib/django/templatetags
+copying django/templatetags/tz.py -> build/lib/django/templatetags
+copying django/templatetags/__init__.py -> build/lib/django/templatetags
+creating build/lib/django/test
+copying django/test/client.py -> build/lib/django/test
+copying django/test/html.py -> build/lib/django/test
+copying django/test/runner.py -> build/lib/django/test
+copying django/test/selenium.py -> build/lib/django/test
+copying django/test/signals.py -> build/lib/django/test
+copying django/test/testcases.py -> build/lib/django/test
+copying django/test/utils.py -> build/lib/django/test
+copying django/test/__init__.py -> build/lib/django/test
+creating build/lib/django/urls
+copying django/urls/base.py -> build/lib/django/urls
+copying django/urls/conf.py -> build/lib/django/urls
+copying django/urls/converters.py -> build/lib/django/urls
+copying django/urls/exceptions.py -> build/lib/django/urls
+copying django/urls/resolvers.py -> build/lib/django/urls
+co
+... <1981465 chars omitted> ...
+ral_blocktrans_collision (i18n.test_extraction.CopyPluralFormsExtractorTests) ... skipped 'xgettext is mandatory for extraction tests'
+test_no_locale_raises (i18n.test_extraction.CustomLayoutExtractionTests) ... skipped 'xgettext is mandatory for extraction tests'
+test_project_locale_paths (i18n.test_extraction.CustomLayoutExtractionTests) ... skipped 'xgettext is mandatory for extraction tests'
+test_command_help (i18n.test_extraction.ExcludedLocaleExtractionTests) ... skipped 'xgettext is mandatory for extraction tests'
+test_multiple_locales_excluded (i18n.test_extraction.ExcludedLocaleExtractionTests) ... skipped 'xgettext is mandatory for extraction tests'
+test_multiple_locales_excluded_with_locale (i18n.test_extraction.ExcludedLocaleExtractionTests) ... skipped 'xgettext is mandatory for extraction tests'
+test_one_locale_excluded (i18n.test_extraction.ExcludedLocaleExtractionTests) ... skipped 'xgettext is mandatory for extraction tests'
+test_one_locale_excluded_with_locale (i18n.test_extraction.ExcludedLocaleExtractionTests) ... skipped 'xgettext is mandatory for extraction tests'
+test_ignore_directory (i18n.test_extraction.IgnoredExtractorTests) ... skipped 'xgettext is mandatory for extraction tests'
+test_ignore_file_patterns (i18n.test_extraction.IgnoredExtractorTests) ... skipped 'xgettext is mandatory for extraction tests'
+test_ignore_subdirectory (i18n.test_extraction.IgnoredExtractorTests) ... skipped 'xgettext is mandatory for extraction tests'
+test_media_static_dirs_ignored (i18n.test_extraction.IgnoredExtractorTests) ... skipped 'xgettext is mandatory for extraction tests'
+test_default_root_settings (i18n.test_extraction.JavascriptExtractorTests) ... skipped 'xgettext is mandatory for extraction tests'
+test_javascript_literals (i18n.test_extraction.JavascriptExtractorTests) ... skipped 'xgettext is mandatory for extraction tests'
+test_media_static_dirs_ignored (i18n.test_extraction.JavascriptExtractorTests) ... skipped 'xgettext is mandatory for extraction tests'
+test_keep_pot_disabled_by_default (i18n.test_extraction.KeepPotFileExtractorTests) ... skipped 'xgettext is mandatory for extraction tests'
+test_keep_pot_enabled (i18n.test_extraction.KeepPotFileExtractorTests) ... skipped 'xgettext is mandatory for extraction tests'
+test_keep_pot_explicitly_disabled (i18n.test_extraction.KeepPotFileExtractorTests) ... skipped 'xgettext is mandatory for extraction tests'
+test_add_location_file (i18n.test_extraction.LocationCommentsTests)
+makemessages --add-location=file ... skipped 'xgettext is mandatory for extraction tests'
+test_add_location_full (i18n.test_extraction.LocationCommentsTests)
+makemessages --add-location=full ... skipped 'xgettext is mandatory for extraction tests'
+test_add_location_gettext_version_check (i18n.test_extraction.LocationCommentsTests) ... skipped 'xgettext is mandatory for extraction tests'
+test_add_location_never (i18n.test_extraction.LocationCommentsTests)
+makemessages --add-location=never ... skipped 'xgettext is mandatory for extraction tests'
+test_location_comments_for_templatized_files (i18n.test_extraction.LocationCommentsTests) ... skipped 'xgettext is mandatory for extraction tests'
+test_no_location_disabled (i18n.test_extraction.LocationCommentsTests)
+Behavior is correct if --no-location switch isn't specified. ... skipped 'xgettext is mandatory for extraction tests'
+test_no_location_enabled (i18n.test_extraction.LocationCommentsTests)
+Behavior is correct if --no-location switch is specified. See #16903. ... skipped 'xgettext is mandatory for extraction tests'
+test_all_locales (i18n.test_extraction.MultipleLocaleExtractionTests) ... skipped 'xgettext is mandatory for extraction tests'
+test_multiple_locales (i18n.test_extraction.MultipleLocaleExtractionTests) ... skipped 'xgettext is mandatory for extraction tests'
+test_no_wrap_disabled (i18n.test_extraction.NoWrapExtractorTests) ... skipped 'xgettext is mandatory for extraction tests'
+test_no_wrap_enabled (i18n.test_extraction.NoWrapExtractorTests) ... skipped 'xgettext is mandatory for extraction tests'
+test_symlink (i18n.test_extraction.SymlinkExtractorTests) ... skipped 'xgettext is mandatory for extraction tests'
+test_eq (i18n.test_management.TranslatableFileTests) ... ok
+test_repr (i18n.test_management.TranslatableFileTests) ... ok
+test_adds_python_format_to_all_percent_signs (i18n.test_percents.ExtractingStringsWithPercentSigns) ... ok
+test_trans_tag_with_percent_symbol_at_the_end (i18n.test_percents.ExtractingStringsWithPercentSigns) ... ok
+test_trans_tag_with_percent_symbol_in_the_middle (i18n.test_percents.ExtractingStringsWithPercentSigns) ... ok
+test_trans_tag_with_string_that_look_like_fmt_spec (i18n.test_percents.ExtractingStringsWithPercentSigns) ... ok
+test_translates_multiple_percent_signs (i18n.test_percents.RenderingTemplatesWithPercentSigns) ... ok
+test_translates_with_a_percent_symbol_at_the_end (i18n.test_percents.RenderingTemplatesWithPercentSigns) ... ok
+test_translates_with_percent_symbol_in_the_middle (i18n.test_percents.RenderingTemplatesWithPercentSigns) ... ok
+test_translates_with_percent_symbol_using_context (i18n.test_percents.RenderingTemplatesWithPercentSigns) ... ok
+test_translates_with_string_that_look_like_fmt_spec_with_trans (i18n.test_percents.RenderingTemplatesWithPercentSigns) ... ok
+test_app_translation (i18n.tests.AppResolutionOrderI18NTests) ... ok
+test_check_for_language (i18n.tests.CountrySpecificLanguageTests) ... ok
+test_check_for_language_null (i18n.tests.CountrySpecificLanguageTests) ... ok
+test_get_language_from_request (i18n.tests.CountrySpecificLanguageTests) ... ok
+test_get_language_from_request_null (i18n.tests.CountrySpecificLanguageTests) ... ok
+test_specific_language_codes (i18n.tests.CountrySpecificLanguageTests) ... ok
+test_django_fallback (i18n.tests.DjangoFallbackResolutionOrderI18NTests) ... ok
+test_admin_javascript_supported_input_formats (i18n.tests.FormattingTests) ... ok
+test_all_format_strings (i18n.tests.FormattingTests) ... 

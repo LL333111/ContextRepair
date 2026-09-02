@@ -1,0 +1,212 @@
+ContextRepair: omitted slow worktree status diagnostic
+d49a6f13af2 DOC what's new clean up for 0.21.3
+ContextRepair: omitted slow worktree diff diagnostic
+Using pip 21.2.2 from /opt/miniconda3/envs/testbed/lib/python3.6/site-packages/pip (python 3.6)
+Obtaining file:///testbed
+Requirement already satisfied: numpy>=1.11.0 in /opt/miniconda3/envs/testbed/lib/python3.6/site-packages (from scikit-learn==0.22.dev0) (1.19.2)
+Requirement already satisfied: scipy>=0.17.0 in /opt/miniconda3/envs/testbed/lib/python3.6/site-packages (from scikit-learn==0.22.dev0) (1.5.2)
+Requirement already satisfied: joblib>=0.11 in /opt/miniconda3/envs/testbed/lib/python3.6/site-packages (from scikit-learn==0.22.dev0) (1.1.1)
+Installing collected packages: scikit-learn
+  Running setup.py develop for scikit-learn
+============================= test session starts ==============================
+platform linux -- Python 3.6.13, pytest-6.2.4, py-1.11.0, pluggy-0.13.1
+rootdir: /testbed, configfile: setup.cfg
+collected 40 items
+
+sklearn/cluster/tests/test_optics.py ............F...................... [ 87%]
+.....                                                                    [100%]
+
+=================================== FAILURES ===================================
+_______________________________ test_extract_xi ________________________________
+
+    def test_extract_xi():
+        # small and easy test (no clusters around other clusters)
+        # but with a clear noise data.
+        rng = np.random.RandomState(0)
+        n_points_per_cluster = 5
+    
+        C1 = [-5, -2] + .8 * rng.randn(n_points_per_cluster, 2)
+        C2 = [4, -1] + .1 * rng.randn(n_points_per_cluster, 2)
+        C3 = [1, -2] + .2 * rng.randn(n_points_per_cluster, 2)
+        C4 = [-2, 3] + .3 * rng.randn(n_points_per_cluster, 2)
+        C5 = [3, -2] + .6 * rng.randn(n_points_per_cluster, 2)
+        C6 = [5, 6] + .2 * rng.randn(n_points_per_cluster, 2)
+    
+        X = np.vstack((C1, C2, C3, C4, C5, np.array([[100, 100]]), C6))
+        expected_labels = np.r_[[2] * 5, [0] * 5, [1] * 5, [3] * 5, [1] * 5,
+                                -1, [4] * 5]
+        X, expected_labels = shuffle(X, expected_labels, random_state=rng)
+    
+        clust = OPTICS(min_samples=3, min_cluster_size=2,
+                       max_eps=20, cluster_method='xi',
+                       xi=0.4).fit(X)
+        assert_array_equal(clust.labels_, expected_labels)
+    
+        # check float min_samples and min_cluster_size
+        clust = OPTICS(min_samples=0.1, min_cluster_size=0.08,
+                       max_eps=20, cluster_method='xi',
+>                      xi=0.4).fit(X)
+
+sklearn/cluster/tests/test_optics.py:107: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+sklearn/cluster/optics_.py:248: in fit
+    max_eps=self.max_eps)
+sklearn/cluster/optics_.py:456: in compute_optics_graph
+    nbrs.fit(X)
+sklearn/neighbors/base.py:932: in fit
+    return self._fit(X)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = NearestNeighbors(algorithm='auto', leaf_size=30, metric='minkowski',
+                 metric_params=None, n_jobs=None, n_neighbors=3.1, p=2,
+                 radius=1.0)
+X = array([[  4.01440436,  -0.85457265],
+       [ -2.11619805,   2.90930917],
+       [  1.0091517 ,  -2.03743677],
+       ...     ],
+       [ -3.50595361,  -2.7818223 ],
+       [  4.89783897,   5.76387356],
+       [  2.24832278,  -1.53350579]])
+
+    def _fit(self, X):
+        self._check_algorithm_metric()
+        if self.metric_params is None:
+            self.effective_metric_params_ = {}
+        else:
+            self.effective_metric_params_ = self.metric_params.copy()
+    
+        effective_p = self.effective_metric_params_.get('p', self.p)
+        if self.metric in ['wminkowski', 'minkowski']:
+            self.effective_metric_params_['p'] = effective_p
+    
+        self.effective_metric_ = self.metric
+        # For minkowski distance, use more efficient methods where available
+        if self.metric == 'minkowski':
+            p = self.effective_metric_params_.pop('p', 2)
+            if p < 1:
+                raise ValueError("p must be greater than one "
+                                 "for minkowski metric")
+            elif p == 1:
+                self.effective_metric_ = 'manhattan'
+            elif p == 2:
+                self.effective_metric_ = 'euclidean'
+            elif p == np.inf:
+                self.effective_metric_ = 'chebyshev'
+            else:
+                self.effective_metric_params_['p'] = p
+    
+        if isinstance(X, NeighborsBase):
+            self._fit_X = X._fit_X
+            self._tree = X._tree
+            self._fit_method = X._fit_method
+            return self
+    
+        elif isinstance(X, BallTree):
+            self._fit_X = X.data
+            self._tree = X
+            self._fit_method = 'ball_tree'
+            return self
+    
+        elif isinstance(X, KDTree):
+            self._fit_X = X.data
+            self._tree = X
+            self._fit_method = 'kd_tree'
+            return self
+    
+        X = check_array(X, accept_sparse='csr')
+    
+        n_samples = X.shape[0]
+        if n_samples == 0:
+            raise ValueError("n_samples must be greater than 0")
+    
+        if issparse(X):
+            if self.algorithm not in ('auto', 'brute'):
+                warnings.warn("cannot use tree with sparse input: "
+                              "using brute force")
+            if self.effective_metric_ not in VALID_METRICS_SPARSE['brute'] \
+                    and not callable(self.effective_metric_):
+                raise ValueError("Metric '%s' not valid for sparse input. "
+                                 "Use sorted(sklearn.neighbors."
+                                 "VALID_METRICS_SPARSE['brute']) "
+                                 "to get valid options. "
+                                 "Metric can also be a callable function."
+                                 % (self.effective_metric_
+... <4226 chars omitted> ...
+tests/test_optics.py::test_dbscan_optics_parity[10-0.3]
+PASSED sklearn/cluster/tests/test_optics.py::test_dbscan_optics_parity[10-0.5]
+PASSED sklearn/cluster/tests/test_optics.py::test_dbscan_optics_parity[20-0.1]
+PASSED sklearn/cluster/tests/test_optics.py::test_dbscan_optics_parity[20-0.3]
+PASSED sklearn/cluster/tests/test_optics.py::test_dbscan_optics_parity[20-0.5]
+PASSED sklearn/cluster/tests/test_optics.py::test_min_samples_edge_case
+PASSED sklearn/cluster/tests/test_optics.py::test_min_cluster_size[2]
+PASSED sklearn/cluster/tests/test_optics.py::test_min_cluster_size_invalid[0]
+PASSED sklearn/cluster/tests/test_optics.py::test_min_cluster_size_invalid[-1]
+PASSED sklearn/cluster/tests/test_optics.py::test_min_cluster_size_invalid[1.1]
+PASSED sklearn/cluster/tests/test_optics.py::test_min_cluster_size_invalid[2.2]
+PASSED sklearn/cluster/tests/test_optics.py::test_min_cluster_size_invalid2
+PASSED sklearn/cluster/tests/test_optics.py::test_processing_order
+PASSED sklearn/cluster/tests/test_optics.py::test_compare_to_ELKI
+PASSED sklearn/cluster/tests/test_optics.py::test_wrong_cluster_method
+PASSED sklearn/cluster/tests/test_optics.py::test_extract_dbscan
+PASSED sklearn/cluster/tests/test_optics.py::test_precomputed_dists
+FAILED sklearn/cluster/tests/test_optics.py::test_extract_xi - TypeError: n_n...
+=================== 1 failed, 39 passed, 1 warning in 19.05s ===================
+>>>>> Test Exit Code: 1
+
+    Running command python setup.py egg_info
+    running egg_info
+    creating /tmp/pip-pip-egg-info-jgjyu9cs/scikit_learn.egg-info
+    writing /tmp/pip-pip-egg-info-jgjyu9cs/scikit_learn.egg-info/PKG-INFO
+    writing dependency_links to /tmp/pip-pip-egg-info-jgjyu9cs/scikit_learn.egg-info/dependency_links.txt
+    writing requirements to /tmp/pip-pip-egg-info-jgjyu9cs/scikit_learn.egg-info/requires.txt
+    writing top-level names to /tmp/pip-pip-egg-info-jgjyu9cs/scikit_learn.egg-info/top_level.txt
+    writing manifest file '/tmp/pip-pip-egg-info-jgjyu9cs/scikit_learn.egg-info/SOURCES.txt'
+    reading manifest file '/tmp/pip-pip-egg-info-jgjyu9cs/scikit_learn.egg-info/SOURCES.txt'
+    reading manifest template 'MANIFEST.in'
+    adding license file 'COPYING'
+    writing manifest file '/tmp/pip-pip-egg-info-jgjyu9cs/scikit_learn.egg-info/SOURCES.txt'
+    Partial import of sklearn during the build process.
+    Running command /opt/miniconda3/envs/testbed/bin/python -c 'import io, os, sys, setuptools, tokenize; sys.argv[0] = '"'"'/testbed/setup.py'"'"'; __file__='"'"'/testbed/setup.py'"'"';f = getattr(tokenize, '"'"'open'"'"', open)(__file__) if os.path.exists(__file__) else io.StringIO('"'"'from setuptools import setup; setup()'"'"');code = f.read().replace('"'"'\r\n'"'"', '"'"'\n'"'"');f.close();exec(compile(code, __file__, '"'"'exec'"'"'))' develop --no-deps
+    C compiler: gcc -pthread -B /opt/miniconda3/envs/testbed/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC
+
+    compile options: '-c'
+    extra options: '-fopenmp'
+    gcc: test_openmp.c
+    gcc -pthread -B /opt/miniconda3/envs/testbed/compiler_compat -Wl,--sysroot=/ objects/test_openmp.o -o test_openmp -fopenmp
+    Partial import of sklearn during the build process.
+    Traceback (most recent call last):
+      File "<string>", line 1, in <module>
+      File "/testbed/setup.py", line 290, in <module>
+        setup_package()
+      File "/testbed/setup.py", line 286, in setup_package
+        setup(**metadata)
+      File "/opt/miniconda3/envs/testbed/lib/python3.6/site-packages/numpy/distutils/core.py", line 135, in setup
+        config = configuration()
+      File "/testbed/setup.py", line 174, in configuration
+        config.add_subpackage('sklearn')
+      File "/opt/miniconda3/envs/testbed/lib/python3.6/site-packages/numpy/distutils/misc_util.py", line 1020, in add_subpackage
+        caller_level = 2)
+      File "/opt/miniconda3/envs/testbed/lib/python3.6/site-packages/numpy/distutils/misc_util.py", line 989, in get_subpackage
+        caller_level = caller_level + 1)
+      File "/opt/miniconda3/envs/testbed/lib/python3.6/site-packages/numpy/distutils/misc_util.py", line 926, in _get_configuration_from_setup_py
+        config = setup_module.configuration(*args)
+      File "sklearn/setup.py", line 76, in configuration
+        maybe_cythonize_extensions(top_path, config)
+      File "/testbed/sklearn/_build_utils/__init__.py", line 43, in maybe_cythonize_extensions
+        with_openmp = check_openmp_support()
+      File "/testbed/sklearn/_build_utils/openmp_helpers.py", line 100, in check_openmp_support
+        output = subprocess.check_output('./test_openmp')
+      File "/opt/miniconda3/envs/testbed/lib/python3.6/subprocess.py", line 356, in check_output
+        **kwargs).stdout
+      File "/opt/miniconda3/envs/testbed/lib/python3.6/subprocess.py", line 423, in run
+        with Popen(*popenargs, **kwargs) as process:
+      File "/opt/miniconda3/envs/testbed/lib/python3.6/subprocess.py", line 729, in __init__
+        restore_signals, start_new_session)
+      File "/opt/miniconda3/envs/testbed/lib/python3.6/subprocess.py", line 1364, in _execute_child
+        raise child_exception_type(errno_num, err_msg, err_filename)
+    PermissionError: [Errno 13] Permission denied: './test_openmp'
+ERROR: Command errored out with exit status 1: /opt/miniconda3/envs/testbed/bin/python -c 'import io, os, sys, setuptools, tokenize; sys.argv[0] = '"'"'/testbed/setup.py'"'"'; __file__='"'"'/testbed/setup.py'"'"';f = getattr(tokenize, '"'"'open'"'"', open)(__file__) if os.path.exists(__file__) else io.StringIO('"'"'from setuptools import setup; setup()'"'"');code = f.read().replace('"'"'\r\n'"'"', '"'"'\n'"'"');f.close();exec(compile(code, __file__, '"'"'exec'"'"'))' develop --no-deps Check the logs for full command output.
+Updated 1 path from a03b3bd563d
+Checking patch sklearn/cluster/tests/test_optics.py...
+Applied patch sklearn/cluster/tests/test_optics.py cleanly.
+Updated 1 path from a03b3bd563d

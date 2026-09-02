@@ -1,0 +1,30 @@
+condition: retry
+seed: 0
+model:
+  provider: openai-compatible
+  name: deepseek-v4-flash
+  temperature: 0.0
+  max_tokens: 4096
+  thinking_enabled: true
+  api_key_env: DEEPSEEK_API_KEY
+  base_url: https://api.deepseek.com
+  # Conservative peak rates; reported cost is an upper-bound estimate.
+  input_cost_per_million: 0.44
+  output_cost_per_million: 1.32
+budget:
+  max_total_tokens: 200000
+  max_tokens_per_attempt: 100000
+  max_model_calls: 80
+  max_attempts: 2
+  max_wall_seconds: 3600
+agent:
+  max_steps: 18
+  command_timeout_seconds: 180
+  max_tool_output_chars: 12000
+  max_json_repairs: 2
+recovery:
+  enabled: false
+logging:
+  save_raw_messages: true
+  save_tool_output: true
+  save_token_usage: true

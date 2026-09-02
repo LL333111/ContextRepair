@@ -1,0 +1,16 @@
+{
+  "benchmark": "SWE-bench/SWE-bench_Verified",
+  "locked": true,
+  "seed": 31,
+  "size": 6,
+  "instance_ids": [
+    "matplotlib__matplotlib-25311",
+    "scikit-learn__scikit-learn-11578",
+    "scikit-learn__scikit-learn-14496",
+    "sphinx-doc__sphinx-7454",
+    "sphinx-doc__sphinx-7889",
+    "sympy__sympy-23413"
+  ],
+  "sha256": "62db90a8140673d769b14f14e84511f03953047ef59fbd2326217d6171419cb3",
+  "locked_at": "2026-09-02T10:19:06.206Z"
+}

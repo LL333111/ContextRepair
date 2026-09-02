@@ -1,0 +1,104 @@
+{
+  "failure_summary": "The user's expected result for the HNF expression is not produced; instead, the matrix is reduced to a single row, indicating that the HNF algorithm is incorrectly treating the matrix as rank-deficient and dropping a row. The issue likely stems from a misunderstanding of the HNF definition or the algorithm's handling of zero rows/columns, or from the way the expression is parsed/executed.",
+  "failure_type": "incorrect_causal_hypothesis",
+  "contradicted_assumptions": [
+    "The assumption that the HNF of a matrix with a zero row should preserve that row as a zero row in the output.",
+    "The assumption that the expression using np.flip and transposes should yield a row-style HNF with two rows.",
+    "The assumption that the HNF algorithm is rank-deficient when it is not, or that the algorithm should not drop rows that are linearly dependent."
+  ],
+  "missing_context_hypotheses": [
+    "The exact definition of HNF used by SymPy (row-style vs column-style) and whether zero rows are expected to be preserved.",
+    "The behavior of np.flip on a 2D array and how it interacts with the matrix transpose in the user's expression.",
+    "The internal implementation details of the HNF algorithm, particularly how it handles matrices with zero rows or columns and rank determination.",
+    "The version of SymPy and the specific code path (sympy.matrices.normalforms vs sympy.polys.matrices.normalforms) that is being used."
+  ],
+  "candidate_files": [
+    "sympy/matrices/normalforms.py",
+    "sympy/polys/matrices/normalforms.py",
+    "sympy/matrices/tests/test_normalforms.py",
+    "sympy/polys/matrices/tests/test_normalforms.py"
+  ],
+  "candidate_symbols": [
+    "hermite_normal_form",
+    "_hermite_normal_form",
+    "_hermite_normal_form_modulo_D",
+    "DomainMatrix",
+    "rank"
+  ],
+  "search_actions": [
+    {
+      "action": "read",
+      "path": "sympy/polys/matrices/normalforms.py",
+      "start_line": 177,
+      "end_line": 250,
+      "reason": "Inspect the core _hermite_normal_form implementation to understand how it handles zero rows and rank determination."
+    },
+    {
+      "action": "read",
+      "path": "sympy/polys/matrices/normalforms.py",
+      "start_line": 339,
+      "end_line": 410,
+      "reason": "Inspect the public hermite_normal_form wrapper to see how it converts input and handles check_rank and zero rows."
+    },
+    {
+      "action": "read",
+      "path": "sympy/matrices/normalforms.py",
+      "start_line": 70,
+      "end_line": 120,
+      "reason": "Inspect the Matrix-level wrapper to see how it delegates to DomainMatrix and whether it drops zero rows."
+    },
+    {
+      "action": "search",
+      "query": "def _hermite_normal_form",
+      "path": "sympy/polys/matrices/normalforms.py",
+      "glob": "*.py",
+      "reason": "Locate all internal HNF functions and their definitions."
+    },
+    {
+      "action": "search",
+      "query": "def _hermite_normal_form_modulo_D",
+      "path": "sympy/polys/matrices/normalforms.py",
+      "glob": "*.py",
+      "reason": "Locate the modular variant implementation."
+    },
+    {
+      "action": "search",
+      "query": "def hnf",
+      "path": "sympy/polys/matrices",
+      "glob": "*.py",
+      "reason": "Find any other HNF-related helper functions or domain-specific implementations."
+    },
+    {
+      "action": "search",
+      "query": "def rank",
+      "path": "sympy/polys/matrices",
+      "glob": "*.py",
+      "reason": "Find rank computation methods used by HNF to understand how rank deficiency is determined."
+    },
+    {
+      "action": "read",
+      "path": "sympy/polys/matrices/tests/test_normalforms.py",
+      "start_line": 1,
+      "end_line": 100,
+      "reason": "Review existing tests to see expected behavior for matrices with zero rows and rank-deficient cases."
+    },
+    {
+      "action": "read",
+      "path": "sympy/matrices/tests/test_normalforms.py",
+      "start_line": 1,
+      "end_line": 100,
+      "reason": "Review Matrix-level tests for HNF to see if zero-row handling is tested."
+    },
+    {
+      "action": "search",
+      "query": "zero row",
+      "path": "sympy/polys/matrices/normalforms.py",
+      "glob": "*.py",
+      "reason": "Search for comments or logic that explicitly handles zero rows in the HNF algorithm."
+    }
+  ],
+  "priority": [
+    "high"
+  ],
+  "rationale": "The failure is reproducible and affects multiple test files, indicating a core issue in the HNF implementation or its usage. The user's expectation suggests a misunderstanding of the algorithm's behavior, but the test failures indicate that the implementation may not be handling certain cases correctly. The priority is high because it breaks existing tests and the user's use case."
+}

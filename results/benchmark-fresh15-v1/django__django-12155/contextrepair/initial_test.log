@@ -1,0 +1,29 @@
+Generating locales (this might take a while)...
+  en_US.UTF-8... done
+Generation complete.
+ContextRepair: omitted slow worktree status diagnostic
+e8fcdaad5c Fixed #31021 -- Fixed proxy model permissions data migration crash with a multiple databases setup.
+ContextRepair: omitted slow worktree diff diagnostic
+ContextRepair: reusing image-provided editable install
+Testing against Django installed in '/testbed/django'
+Importing application admin_docs
+Skipping setup of unused database(s): default, other.
+System check identified no issues (0 silenced).
+>>>>> Test Exit Code: 0
+
+Updated 1 path from ad66ab6ad7
+Checking patch tests/admin_docs/test_utils.py...
+Applied patch tests/admin_docs/test_utils.py cleanly.
+test_description_output (admin_docs.test_utils.TestUtils) ... ok
+test_initial_header_level (admin_docs.test_utils.TestUtils) ... ok
+test_parse_docstring (admin_docs.test_utils.TestUtils) ... ok
+test_parse_rst (admin_docs.test_utils.TestUtils) ... ok
+test_parse_rst_with_docstring_no_leading_line_feed (admin_docs.test_utils.TestUtils) ... ok
+test_publish_parts (admin_docs.test_utils.TestUtils) ... ok
+test_title_output (admin_docs.test_utils.TestUtils) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.194s
+
+OK
+Updated 1 path from ad66ab6ad7

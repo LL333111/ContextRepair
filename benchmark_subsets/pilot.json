@@ -1,0 +1,15 @@
+{
+  "benchmark": "SWE-bench/SWE-bench_Verified",
+  "locked": true,
+  "seed": 23,
+  "size": 5,
+  "instance_ids": [
+    "django__django-11728",
+    "django__django-12774",
+    "django__django-14434",
+    "sphinx-doc__sphinx-7590",
+    "sympy__sympy-23534"
+  ],
+  "sha256": "5828eaa09191aad05d4d2632fd14a3f61a55130706e8da7e529dfea04e1e0f34",
+  "locked_at": "2026-09-02T00:16:13.030904+00:00"
+}

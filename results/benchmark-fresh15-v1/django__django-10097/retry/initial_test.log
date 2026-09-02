@@ -1,0 +1,184 @@
+ContextRepair: omitted slow worktree status diagnostic
+b9cf764be6 Fixed #29517 -- Added support for SQLite column check constraints on positive integer fields.
+ContextRepair: omitted slow worktree diff diagnostic
+running install
+running bdist_egg
+running egg_info
+creating Django.egg-info
+writing dependency_links to Django.egg-info/dependency_links.txt
+writing Django.egg-info/PKG-INFO
+writing requirements to Django.egg-info/requires.txt
+writing entry points to Django.egg-info/entry_points.txt
+writing top-level names to Django.egg-info/top_level.txt
+writing manifest file 'Django.egg-info/SOURCES.txt'
+reading manifest file 'Django.egg-info/SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+writing manifest file 'Django.egg-info/SOURCES.txt'
+installing library code to build/bdist.linux-x86_64/egg
+running install_lib
+running build_py
+creating build
+creating build/lib
+creating build/lib/django
+copying django/shortcuts.py -> build/lib/django
+copying django/__init__.py -> build/lib/django
+copying django/__main__.py -> build/lib/django
+creating build/lib/django/apps
+copying django/apps/config.py -> build/lib/django/apps
+copying django/apps/registry.py -> build/lib/django/apps
+copying django/apps/__init__.py -> build/lib/django/apps
+creating build/lib/django/conf
+copying django/conf/global_settings.py -> build/lib/django/conf
+copying django/conf/__init__.py -> build/lib/django/conf
+creating build/lib/django/contrib
+copying django/contrib/__init__.py -> build/lib/django/contrib
+creating build/lib/django/core
+copying django/core/exceptions.py -> build/lib/django/core
+copying django/core/paginator.py -> build/lib/django/core
+copying django/core/signals.py -> build/lib/django/core
+copying django/core/signing.py -> build/lib/django/core
+copying django/core/validators.py -> build/lib/django/core
+copying django/core/wsgi.py -> build/lib/django/core
+copying django/core/__init__.py -> build/lib/django/core
+creating build/lib/django/db
+copying django/db/transaction.py -> build/lib/django/db
+copying django/db/utils.py -> build/lib/django/db
+copying django/db/__init__.py -> build/lib/django/db
+creating build/lib/django/dispatch
+copying django/dispatch/dispatcher.py -> build/lib/django/dispatch
+copying django/dispatch/__init__.py -> build/lib/django/dispatch
+creating build/lib/django/forms
+copying django/forms/boundfield.py -> build/lib/django/forms
+copying django/forms/fields.py -> build/lib/django/forms
+copying django/forms/forms.py -> build/lib/django/forms
+copying django/forms/formsets.py -> build/lib/django/forms
+copying django/forms/models.py -> build/lib/django/forms
+copying django/forms/renderers.py -> build/lib/django/forms
+copying django/forms/utils.py -> build/lib/django/forms
+copying django/forms/widgets.py -> build/lib/django/forms
+copying django/forms/__init__.py -> build/lib/django/forms
+creating build/lib/django/http
+copying django/http/cookie.py -> build/lib/django/http
+copying django/http/multipartparser.py -> build/lib/django/http
+copying django/http/request.py -> build/lib/django/http
+copying django/http/response.py -> build/lib/django/http
+copying django/http/__init__.py -> build/lib/django/http
+creating build/lib/django/middleware
+copying django/middleware/cache.py -> build/lib/django/middleware
+copying django/middleware/clickjacking.py -> build/lib/django/middleware
+copying django/middleware/common.py -> build/lib/django/middleware
+copying django/middleware/csrf.py -> build/lib/django/middleware
+copying django/middleware/gzip.py -> build/lib/django/middleware
+copying django/middleware/http.py -> build/lib/django/middleware
+copying django/middleware/locale.py -> build/lib/django/middleware
+copying django/middleware/security.py -> build/lib/django/middleware
+copying django/middleware/__init__.py -> build/lib/django/middleware
+creating build/lib/django/template
+copying django/template/base.py -> build/lib/django/template
+copying django/template/context.py -> build/lib/django/template
+copying django/template/context_processors.py -> build/lib/django/template
+copying django/template/defaultfilters.py -> build/lib/django/template
+copying django/template/defaulttags.py -> build/lib/django/template
+copying django/template/engine.py -> build/lib/django/template
+copying django/template/exceptions.py -> build/lib/django/template
+copying django/template/library.py -> build/lib/django/template
+copying django/template/loader.py -> build/lib/django/template
+copying django/template/loader_tags.py -> build/lib/django/template
+copying django/template/response.py -> build/lib/django/template
+copying django/template/smartif.py -> build/lib/django/template
+copying django/template/utils.py -> build/lib/django/template
+copying django/template/__init__.py -> build/lib/django/template
+creating build/lib/django/templatetags
+copying django/templatetags/cache.py -> build/lib/django/templatetags
+copying django/templatetags/i18n.py -> build/lib/django/templatetags
+copying django/templatetags/l10n.py -> build/lib/django/templatetags
+copying django/templatetags/static.py -> build/lib/django/templatetags
+copying django/templatetags/tz.py -> build/lib/django/templatetags
+copying django/templatetags/__init__.py -> build/lib/django/templatetags
+creating build/lib/django/test
+copying django/test/client.py -> build/lib/django/test
+copying django/test/html.py -> build/lib/django/test
+copying django/test/runner.py -> build/lib/django/test
+copying django/test/selenium.py -> build/lib/django/test
+copying django/test/signals.py -> build/lib/django/test
+copying django/test/testcases.py -> build/lib/django/test
+copying django/test/utils.py -> build/lib/django/test
+copying django/test/__init__.py -> build/lib/django/test
+creating build/lib/django/urls
+copying django/urls/base.py -> build/lib/django/urls
+copying django/urls/conf.py -> build/lib/django/urls
+copying django/urls/converters.py -> build/lib/django/urls
+copying django/urls/exceptions.py -> build/lib/django/urls
+copying django/urls/resolvers.py -> build/lib/django/urls
+co
+... <1207266 chars omitted> ...
+n-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/utils/http.py to http.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/utils/inspect.py to inspect.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/utils/ipv6.py to ipv6.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/utils/itercompat.py to itercompat.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/utils/jslex.py to jslex.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/utils/log.py to log.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/utils/lorem_ipsum.py to lorem_ipsum.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/utils/lru_cache.py to lru_cache.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/utils/module_loading.py to module_loading.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/utils/numberformat.py to numberformat.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/utils/regex_helper.py to regex_helper.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/utils/safestring.py to safestring.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/utils/six.py to six.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/utils/termcolors.py to termcolors.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/utils/text.py to text.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/utils/timesince.py to timesince.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/utils/timezone.py to timezone.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/utils/translation/template.py to template.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/utils/translation/trans_null.py to trans_null.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/utils/translation/trans_real.py to trans_real.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/utils/translation/__init__.py to __init__.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/utils/tree.py to tree.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/utils/version.py to version.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/utils/xmlutils.py to xmlutils.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/utils/_os.py to _os.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/utils/__init__.py to __init__.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/views/csrf.py to csrf.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/views/debug.py to debug.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/views/decorators/cache.py to cache.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/views/decorators/clickjacking.py to clickjacking.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/views/decorators/csrf.py to csrf.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/views/decorators/debug.py to debug.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/views/decorators/gzip.py to gzip.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/views/decorators/http.py to http.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/views/decorators/vary.py to vary.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/views/decorators/__init__.py to __init__.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/views/defaults.py to defaults.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/views/generic/base.py to base.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/views/generic/dates.py to dates.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/views/generic/detail.py to detail.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/views/generic/edit.py to edit.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/views/generic/list.py to list.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/views/generic/__init__.py to __init__.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/views/i18n.py to i18n.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/views/static.py to static.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/views/__init__.py to __init__.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/__init__.py to __init__.cpython-35.pyc
+byte-compiling build/bdist.linux-x86_64/egg/django/__main__.py to __main__.cpython-35.pyc
+creating build/bdist.linux-x86_64/egg/EGG-INFO
+installing scripts to build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+running install_scripts
+running build_scripts
+creating build/scripts-3.5
+copying and adjusting django/bin/django-admin.py -> build/scripts-3.5
+changing mode of build/scripts-3.5/django-admin.py from 644 to 755
+creating build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+copying build/scripts-3.5/django-admin.py -> build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+changing mode of build/bdist.linux-x86_64/egg/EGG-INFO/scripts/django-admin.py to 755
+copying Django.egg-info/PKG-INFO -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying Django.egg-info/SOURCES.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying Django.egg-info/dependency_links.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying Django.egg-info/entry_points.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying Django.egg-info/not-zip-safe -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying Django.egg-info/requires.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying Django.egg-info/top_level.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+creating dist
+creating 'dist/Django-2.2.dev20180625180104-py3.5.egg' and adding 'build/bdist.linux-x86_64/egg' to it
+
+warning: no previously-included files matching '__pycache__' found anywhere in distribution

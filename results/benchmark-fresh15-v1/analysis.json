@@ -1,0 +1,56 @@
+{
+  "single": {
+    "tasks": 15,
+    "resolved": 5,
+    "resolved_pct": 33.333333333333336,
+    "initial_failures": 10,
+    "recovered": 0,
+    "recovery_pct": 0.0,
+    "avg_input_tokens": 81626.53333333334,
+    "avg_output_tokens": 8155.933333333333,
+    "avg_total_tokens": 89782.46666666666,
+    "avg_cost_usd": 0.04668150666666667,
+    "cost_per_resolved_usd": 0.14004452,
+    "avg_wall_seconds": 465.2300666666706
+  },
+  "retry": {
+    "tasks": 15,
+    "resolved": 9,
+    "resolved_pct": 60.0,
+    "initial_failures": 8,
+    "recovered": 2,
+    "recovery_pct": 25.0,
+    "avg_input_tokens": 122452.2,
+    "avg_output_tokens": 9982.133333333333,
+    "avg_total_tokens": 132434.33333333334,
+    "avg_cost_usd": 0.06705538400000001,
+    "cost_per_resolved_usd": 0.11175897333333334,
+    "avg_wall_seconds": 560.2771999999998
+  },
+  "contextrepair": {
+    "tasks": 15,
+    "resolved": 8,
+    "resolved_pct": 53.333333333333336,
+    "initial_failures": 9,
+    "recovered": 2,
+    "recovery_pct": 22.22222222222222,
+    "avg_input_tokens": 137309.73333333334,
+    "avg_output_tokens": 10140.2,
+    "avg_total_tokens": 147449.93333333332,
+    "avg_cost_usd": 0.07380134666666667,
+    "cost_per_resolved_usd": 0.138377525,
+    "avg_wall_seconds": 466.3260666666708
+  },
+  "failure_analysis": {
+    "failure_type_counts": {
+      "environment_test_failure": 1,
+      "incomplete_fix": 3,
+      "incorrect_causal_hypothesis": 3,
+      "missing_cross_file_dependency": 2
+    },
+    "avg_new_files": {
+      "recovered": 3.5,
+      "not_recovered": 3.2857142857142856
+    }
+  }
+}

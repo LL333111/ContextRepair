@@ -1,0 +1,62 @@
+Generating locales (this might take a while)...
+  en_US.UTF-8... done
+Generation complete.
+ContextRepair: omitted slow worktree status diagnostic
+69331bb851 Added stub release notes for 3.0.3.
+ContextRepair: omitted slow worktree diff diagnostic
+ContextRepair: reusing image-provided editable install
+>>>>> Test Exit Code: 1
+
+Updated 2 paths from 88307fafa4
+Checking patch tests/template_tests/templatetags/inclusion.py...
+Checking patch tests/template_tests/test_custom.py...
+Applied patch tests/template_tests/templatetags/inclusion.py cleanly.
+Applied patch tests/template_tests/test_custom.py cleanly.
+Traceback (most recent call last):
+  File "./tests/runtests.py", line 23, in <module>
+    from django.test import TestCase, TransactionTestCase
+  File "/testbed/django/test/__init__.py", line 3, in <module>
+    from django.test.client import Client, RequestFactory
+  File "/testbed/django/test/client.py", line 13, in <module>
+    from django.core.handlers.base import BaseHandler
+  File "/testbed/django/core/handlers/base.py", line 8, in <module>
+    from django.urls import get_resolver, set_urlconf
+  File "/testbed/django/urls/__init__.py", line 1, in <module>
+    from .base import (
+  File "/testbed/django/urls/base.py", line 9, in <module>
+    from .exceptions import NoReverseMatch, Resolver404
+  File "/testbed/django/urls/exceptions.py", line 1, in <module>
+    from django.http import Http404
+  File "/testbed/django/http/__init__.py", line 5, in <module>
+    from django.http.response import (
+  File "/testbed/django/http/response.py", line 15, in <module>
+    from django.core.serializers.json import DjangoJSONEncoder
+  File "/testbed/django/core/serializers/__init__.py", line 23, in <module>
+    from django.core.serializers.base import SerializerDoesNotExist
+  File "/testbed/django/core/serializers/base.py", line 7, in <module>
+    from django.db import models
+  File "/testbed/django/db/models/__init__.py", line 3, in <module>
+    from django.db.models.aggregates import *  # NOQA
+  File "/testbed/django/db/models/aggregates.py", line 5, in <module>
+    from django.db.models.expressions import Case, Func, Star, When
+  File "/testbed/django/db/models/expressions.py", line 8, in <module>
+    from django.db.models import fields
+  File "/testbed/django/db/models/fields/__init__.py", line 11, in <module>
+    from django import forms
+  File "/testbed/django/forms/__init__.py", line 6, in <module>
+    from django.forms.boundfield import *  # NOQA
+  File "/testbed/django/forms/boundfield.py", line 4, in <module>
+    from django.forms.widgets import Textarea, TextInput
+  File "/testbed/django/forms/widgets.py", line 13, in <module>
+    from django.templatetags.static import static
+  File "/testbed/django/templatetags/static.py", line 3, in <module>
+    from django import template
+  File "/testbed/django/template/__init__.py", line 44, in <module>
+    from .engine import Engine
+  File "/testbed/django/template/engine.py", line 10, in <module>
+    from .library import import_library
+  File "/testbed/django/template/library.py", line 276
+    if param in unhandled_params:
+    ^
+IndentationError: unexpected indent
+Updated 2 paths from 88307fafa4

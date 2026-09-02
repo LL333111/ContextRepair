@@ -1,0 +1,388 @@
+[
+  {
+    "step": 1,
+    "phase": "recovery",
+    "role": "environment",
+    "action_type": "reasoning",
+    "content": "Issue to repair:\nMake URLValidator reject invalid characters in the username and password\nDescription\n\t \n\t\t(last modified by Tim Bell)\n\t \nSince #20003, core.validators.URLValidator accepts URLs with usernames and passwords. RFC 1738 section 3.1 requires \"Within the user and password field, any \":\", \"@\", or \"/\" must be encoded\"; however, those characters are currently accepted without being %-encoded. That allows certain invalid URLs to pass validation incorrectly. (The issue originates in Diego Perini's ​gist, from which the implementation in #20003 was derived.)\nAn example URL that should be invalid is http://foo/bar@example.com; furthermore, many of the test cases in tests/validators/invalid_urls.txt would be rendered valid under the current implementation by appending a query string of the form ?m=foo@example.com to them.\nI note Tim Graham's concern about adding complexity to the validation regex. However, I take the opposite position to Danilo Bargen about invalid URL edge cases: it's not fine if invalid URLs (even so-called \"edge cases\") are accepted when the regex could be fixed simply to reject them correctly. I also note that a URL of the form above was encountered in a production setting, so that this is a genuine use case, not merely an academic exercise.\nPull request: ​https://github.com/django/django/pull/10097\nMake URLValidator reject invalid characters in the username and password\nDescription\n\t \n\t\t(last modified by Tim Bell)\n\t \nSince #20003, core.validators.URLValidator accepts URLs with usernames and passwords. RFC 1738 section 3.1 requires \"Within the user and password field, any \":\", \"@\", or \"/\" must be encoded\"; however, those characters are currently accepted without being %-encoded. That allows certain invalid URLs to pass validation incorrectly. (The issue originates in Diego Perini's ​gist, from which the implementation in #20003 was derived.)\nAn example URL that should be invalid is http://foo/bar@example.com; furthermore, many of the test cases in tests/validators/invalid_urls.txt would be rendered valid under the current implementation by appending a query string of the form ?m=foo@example.com to them.\nI note Tim Graham's concern about adding complexity to the validation regex. However, I take the opposite position to Danilo Bargen about invalid URL edge cases: it's not fine if invalid URLs (even so-called \"edge cases\") are accepted when the regex could be fixed simply to reject them correctly. I also note that a URL of the form above was encountered in a production setting, so that this is a genuine use case, not merely an academic exercise.\nPull request: ​https://github.com/django/django/pull/10097\n\n\nEvaluator test command: __CONTEXTREPAIR_OFFICIAL_EVAL__\nWork until you have applied a repair and exercised relevant tests.",
+    "files": [],
+    "symbols": [],
+    "token_usage": {},
+    "timestamp": "2026-09-02T07:40:13.624824+00:00",
+    "metadata": {}
+  },
+  {
+    "step": 2,
+    "phase": "recovery",
+    "role": "agent",
+    "action_type": "reasoning",
+    "content": "{\"action\":\"list\",\"path\":\".\"}",
+    "files": [],
+    "symbols": [],
+    "token_usage": {
+      "input_tokens": 1017,
+      "output_tokens": 9,
+      "cost_usd": 0.00045936,
+      "estimated": false
+    },
+    "timestamp": "2026-09-02T07:40:14.615921+00:00",
+    "metadata": {
+      "model": "deepseek-v4-flash"
+    }
+  },
+  {
+    "step": 3,
+    "phase": "recovery",
+    "role": "tool",
+    "action_type": "list",
+    "content": ".git/\n.tx/\ndjango/\ndocs/\nextras/\njs_tests/\nscripts/\ntests/\n.editorconfig\n.eslintignore\n.eslintrc\n.gitattributes\n.gitignore\n.hgignore\nAUTHORS\nCONTRIBUTING.rst\nGruntfile.js\nINSTALL\nLICENSE\nLICENSE.python\nMANIFEST.in\npackage.json\nREADME.rst\nsetup.cfg\nsetup.py\ntox.ini",
+    "files": [],
+    "symbols": [],
+    "token_usage": {},
+    "timestamp": "2026-09-02T07:40:14.657139+00:00",
+    "metadata": {}
+  },
+  {
+    "step": 4,
+    "phase": "recovery",
+    "role": "agent",
+    "action_type": "reasoning",
+    "content": "{\"action\":\"read\",\"path\":\"django/core/validators.py\",\"start_line\":1,\"end_line\":300,\"symbols\":[\"URLValidator\"]}",
+    "files": [],
+    "symbols": [],
+    "token_usage": {
+      "input_tokens": 1127,
+      "output_tokens": 33,
+      "cost_usd": 0.0005394400000000001,
+      "estimated": false
+    },
+    "timestamp": "2026-09-02T07:40:15.840222+00:00",
+    "metadata": {
+      "model": "deepseek-v4-flash"
+    }
+  },
+  {
+    "step": 5,
+    "phase": "recovery",
+    "role": "tool",
+    "action_type": "read",
+    "content": "     1  import ipaddress\n     2  import re\n     3  from pathlib import Path\n     4  from urllib.parse import urlsplit, urlunsplit\n     5  \n     6  from django.core.exceptions import ValidationError\n     7  from django.utils.deconstruct import deconstructible\n     8  from django.utils.functional import SimpleLazyObject\n     9  from django.utils.ipv6 import is_valid_ipv6_address\n    10  from django.utils.translation import gettext_lazy as _, ngettext_lazy\n    11  \n    12  # These values, if given to validate(), will trigger the self.required check.\n    13  EMPTY_VALUES = (None, '', [], (), {})\n    14  \n    15  \n    16  def _lazy_re_compile(regex, flags=0):\n    17      \"\"\"Lazily compile a regex with flags.\"\"\"\n    18      def _compile():\n    19          # Compile the regex if it was not passed pre-compiled.\n    20          if isinstance(regex, str):\n    21              return re.compile(regex, flags)\n    22          else:\n    23              assert not flags, \"flags must be empty if regex is passed pre-compiled\"\n    24              return regex\n    25      return SimpleLazyObject(_compile)\n    26  \n    27  \n    28  @deconstructible\n    29  class RegexValidator:\n    30      regex = ''\n    31      message = _('Enter a valid value.')\n    32      code = 'invalid'\n    33      inverse_match = False\n    34      flags = 0\n    35  \n    36      def __init__(self, regex=None, message=None, code=None, inverse_match=None, flags=None):\n    37          if regex is not None:\n    38              self.regex = regex\n    39          if message is not None:\n    40              self.message = message\n    41          if code is not None:\n    42              self.code = code\n    43          if inverse_match is not None:\n    44              self.inverse_match = inverse_match\n    45          if flags is not None:\n    46              self.flags = flags\n    47          if self.flags and not isinstance(self.regex, str):\n    48              raise TypeError(\"If the flags are set, regex must be a regular expression string.\")\n    49  \n    50          self.regex = _lazy_re_compile(self.regex, self.flags)\n    51  \n    52      def __call__(self, value):\n    53          \"\"\"\n    54          Validate that the input contains (or does *not* contain, if\n    55          inverse_match is True) a match for the regular expression.\n    56          \"\"\"\n    57          regex_matches = self.regex.search(str(value))\n    58          invalid_input = regex_matches if self.inverse_match else not regex_matches\n    59          if invalid_input:\n    60              raise ValidationError(self.message, code=self.code)\n    61  \n    62      def __eq__(self, other):\n    63          return (\n    64              isinstance(other, RegexValidator) and\n    65              self.regex.pattern == other.regex.pattern and\n    66              self.regex.flags == other.regex.flags and\n    67              (self.message == other.message) and\n    68              (self.code == other.code) and\n    69              (self.inverse_match == other.inverse_match)\n    70          )\n    71  \n    72  \n    73  @deconstructible\n    74  class URLValidator(RegexValidator):\n    75      ul = '\\u00a1-\\uffff'  # unicode letters range (must not be a raw string)\n    76  \n    77      # IP patterns\n    78      ipv4_re = r'(?:25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(?:\\.(?:25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3}'\n    79      ipv6_re = r'\\[[0-9a-f:\\.]+\\]'  # (simple regex, validated later)\n    80  \n    81      # Host patterns\n    82      hostname_re = r'[a-z' + ul + r'0-9](?:[a-z' + ul + r'0-9-]{0,61}[a-z' + ul + r'0-9])?'\n    83      # Max length for domain name labels is 63 characters per RFC 1034 sec. 3.1\n    84      domain_re = r'(?:\\.(?!-)[a-z' + ul + r'0-9-]{1,63}(?<!-))*'\n    85      tld_re = (\n    86          r'\\.'                                # dot\n    87          r'(?!-)'                             # can't start with a dash\n    88          r'(?:[a-z' + ul + '-]{2,63}'         # domain label\n    89          r'|xn--[a-z0-9]{1,59})'              # or punycode label\n    90          r'(?<!-)'                            # can't end with a dash\n    91          r'\\.?'                               # may have a trailing dot\n    92      )\n    93      host_re = '(' + hostname_re + domain_re + tld_re + '|localhost)'\n    94  \n    95      regex = _lazy_re_compile(\n    96          r'^(?:[a-z0-9\\.\\-\\+]*)://'  # scheme is validated separately\n    97          r'(?:\\S+(?::\\S*)?@)?'  # user:pass authentication\n    98          r'(?:' + ipv4_re + '|' + ipv6_re + '|' + host_re + ')'\n    99          r'(?::\\d{2,5})?'  # port\n   100          r'(?:[/?#][^\\s]*)?'  # resource path\n   101          r'\\Z', re.IGNORECASE)\n   102      message = _('Enter a valid URL.')\n   103      schemes = ['http', 'https', 'ftp', 'ftps']\n   104  \n   105      def __init__(self, schemes=None, **kwargs):\n   106          super().__init__(**kwargs)\n   107          if schemes is not None:\n   108              self.schemes = schemes\n   109  \n   110      def __call__(self, value):\n   111          # Check first if the scheme is valid\n   112          scheme = value.split('://')[0].lower()\n   113          if scheme not in self.schemes:\n   114              raise ValidationError(self.message, code=self.code)\n   115  \n   116          # Then check full URL\n   117          try:\n   118              super().__call__(value)\n   119          except ValidationError as e:\n   120              # Trivial case failed. Try for possible IDN domain\n   121              if value:\n   122                  try:\n   123                      scheme, netloc, path, query, fragment = urlsplit(value)\n   124                  except ValueError:  # for example, \"Invalid IPv6 URL\"\n   125                      raise ValidationError(self.message, code=self.code)\n   126                  try:\n   127                      netloc = netloc.encode('idna').decode('ascii')  # IDN -> ACE\n   128                  except UnicodeError:  # invalid domain part\n   129                      raise e\n   130                  url = urlunsplit((scheme, netloc, path, query, fragment))\n   131                  super().__call__(url)\n   132              else:\n   133                  raise\n   134          else:\n   135              # Now verify IPv6 in the netloc part\n   136              host_match = re.search(r'^\\[(.+)\\](?::\\d{2,5})?$', urlsplit(value).netloc)\n   137              if host_match:\n   138                  potential_ip = host_match.groups()[0]\n   139                  try:\n   140                      validate_ipv6_address(potential_ip)\n   141                  except ValidationError:\n   142                      raise ValidationError(self.message, code=self.code)\n   143  \n   144          # The maximum length of a full host name is 253 characters per RFC 1034\n   145          # section 3.1. It's defined to be 255 bytes or less, but this includes\n   146          # one byte for the length of the name and one byte for the trailing dot\n   147          # that's used to indicate absolute names in DNS.\n   148          if len(urlsplit(value).netloc) > 253:\n   149              raise ValidationError(self.message, code=self.code)\n   150  \n   151  \n   152  integer_validator = RegexValidator(\n   153      _lazy_re_compile(r'^-?\\d+\\Z'),\n   154      message=_('Enter a valid integer.'),\n   155      code='invalid',\n   156  )\n   157  \n   158  \n   159  def validate_integer(value):\n   160      return integer_validator(value)\n   161  \n   162  \n   163  @deconstructible\n   164  class EmailValidator:\n   165      message = _('Enter a valid email address.')\n   166      code = 'invalid'\n   167      user_regex = _lazy_re_compile(\n   168          r\"(^[-!#$%&'*+/=?^_`{}|~0-9A-Z]+(\\.[-!#$%&'*+/=?^_`{}|~0-9A-Z]+)*\\Z\"  # dot-atom\n   169          r'|^\"([\\001-\\010\\013\\014\\016-\\037!#-\\[\\]-\\177]|\\\\[\\001-\\011\\013\\014\\016-\\177])*\"\\Z)',  # quoted-string\n   170          re.IGNORECASE)\n   171      domain_regex = _lazy_re_compile(\n   172          # max length for domain name labels is 63 characters per RFC 1034\n   173          r'((?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\\.)+)(?:[A-Z0-9-]{2,63}(?<!-))\\Z',\n   174          re.IGNORECASE)\n   175      literal_regex = _lazy_re_compile(\n   176          # literal form, ipv4 or ipv6 address (SMTP 4.1.3)\n   177          r'\\[([A-f0-9:\\.]+)\\]\\Z',\n   178          re.IGNORECASE)\n   179      domain_whitelist = ['localhost']\n   180  \n   181      def __init__(self, message=None, code=None, whitelist=None):\n   182          if message is not None:\n   183              self.message = message\n   184          if code is not None:\n   185              self.code = code\n   186          if whitelist is not None:\n   187              self.domain_whitelist = whitelist\n   188  \n   189      def __call__(self, value):\n   190          if not value or '@' not in value:\n   191              raise ValidationError(self.message, code=self.code)\n   192  \n   193          user_part, domain_part = value.rsplit('@', 1)\n   194  \n   195          if not self.user_regex.match(user_part):\n   196              raise ValidationError(self.message, code=self.code)\n   197  \n   198          if (domain_part not in self.domain_whitelist and\n   199                  not self.validate_domain_part(domain_part)):\n   200              # Try for possible IDN domain-part\n   201              try:\n   202                  domain_part = domain_part.encode('idna').decode('ascii')\n   203              except UnicodeError:\n   204                  pass\n   205              else:\n   206                  if self.validate_domain_part(domain_part):\n   207                      return\n   208              raise ValidationError(self.message, code=self.code)\n   209  \n   210      def validate_domain_part(self, domain_part):\n   211          if self.domain_regex.match(domain_part):\n   212              return True\n   213  \n   214          literal_match = self.literal_regex.match(domain_part)\n   215          if literal_match:\n   216              ip_address = literal_match.group(1)\n   217              try:\n   218                  validate_ipv46_address(ip_address)\n   219                  return True\n   220              except ValidationError:\n   221                  pass\n   222          return False\n   223  \n   224      def __eq__(self, other):\n   225          return (\n   226              isinstance(other, EmailValidator) and\n   227              (self.domain_whitelist == other.domain_whitelist) and\n   228              (self.message == other.message) and\n   229              (self.code == other.code)\n   230          )\n   231  \n   232  \n   233  validate_email = EmailValidator()\n   234  \n   235  slug_re = _lazy_re_compile(r'^[-a-zA-Z0-9_]+\\Z')\n   236  validate_slug = RegexValidator(\n   237      slug_re,\n   238      # Translators: \"letters\" means latin letters: a-z and A-Z.\n   239      _(\"Enter a valid 'slug' consisting of letters, numbers, underscores or hyphens.\"),\n   240      'invalid'\n   241  )\n   242  \n   243  slug_unicode_re = _lazy_re_compile(r'^[-\\w]+\\Z')\n   244  validate_unicode_slug = RegexValidator(\n   245      slug_unicode_re,\n   246      _(\"Enter a valid 'slug' consisting of Unicode letters, numbers, underscores, or hyphens.\"),\n   247      'invalid'\n   248  )\n   249  \n   250  \n   251  def validate_ipv4_address(value):\n   252      try:\n   253          ipaddress.IPv4Address(value)\n   254      except ValueError:\n   255          raise ValidationError(_('Enter a valid IPv4 address.'), code='invalid')\n   256  \n   257  \n   258  def validate_ipv6_address(value):\n   259      if not is_valid_ipv6_address(value):\n   260          raise ValidationError(_('Enter a valid IPv6 address.'), code='invalid')\n   261  \n   262  \n   263  def validate_ipv46_address(value):\n   264      try:\n   265          validate_ipv4_address(value)\n   266      except ValidationError:\n   267          try:\n   268              validate_ipv6_address(value)\n   269          except ValidationError:\n   270              raise ValidationError(_('Enter a valid IPv4 or IPv6 address.'), code='invalid')\n   271  \n   272  \n   273  ip_address_validator_map = {\n   274      'both': ([validate_ipv46_address], _('Enter a valid IPv4 or IPv6 address.')),\n   275      'ipv4': ([validate_ipv4_address], _('Enter a valid IPv4 address.')),\n   276      'ipv6': ([validate_ipv6_address], _('Enter a valid IPv6 address.')),\n   277  }\n   278  \n   279  \n   280  def ip_address_validators(protocol, unpack_ipv4):\n   281      \"\"\"\n   282      Depending on the given parameters, return the appropriate validators for\n   283      the GenericIPAddressField.\n   284      \"\"\"\n   285      if protocol != 'both' and unpack_ipv4:\n   286          raise ValueError(\n   287              \"You can only use `unpack_ipv4` if `protocol` is set to 'both'\")\n   288      try:\n   289          return ip_address_validator_map[protocol.lower()]\n   290      except KeyError:\n   291          raise ValueError(\"The protocol '%s' is unknown. Supported: %s\"\n   292                           % (protocol, list(ip_address_validator_map)))\n   293  \n   294  \n   295  def int_list_validator(sep=',', message=None, code='invalid', allow_negative=False):\n   296      regexp = _lazy_re_compile(r'^%(neg)s\\d+(?:%(sep)s%(neg)s\\d+)*\\Z' % {\n   297          'neg': '(-)?' if allow_negative else '',\n   298          'sep': re.escape(sep),\n   299      })\n   300      return RegexValidator(regexp, message=message, code=code)",
+    "files": [
+      "django/core/validators.py"
+    ],
+    "symbols": [
+      "URLValidator"
+    ],
+    "token_usage": {},
+    "timestamp": "2026-09-02T07:40:15.871989+00:00",
+    "metadata": {
+      "start_line": 1,
+      "end_line": 300
+    }
+  },
+  {
+    "step": 6,
+    "phase": "recovery",
+    "role": "agent",
+    "action_type": "reasoning",
+    "content": "{\"action\":\"read\",\"path\":\"tests/validators/tests.py\",\"start_line\":1,\"end_line\":400,\"symbols\":[\"URLValidatorTest\"]}",
+    "files": [],
+    "symbols": [],
+    "token_usage": {
+      "input_tokens": 4735,
+      "output_tokens": 34,
+      "cost_usd": 0.00212828,
+      "estimated": false
+    },
+    "timestamp": "2026-09-02T07:40:16.781111+00:00",
+    "metadata": {
+      "model": "deepseek-v4-flash"
+    }
+  },
+  {
+    "step": 7,
+    "phase": "recovery",
+    "role": "tool",
+    "action_type": "read",
+    "content": "     1  import os\n     2  import re\n     3  import types\n     4  from datetime import datetime, timedelta\n     5  from decimal import Decimal\n     6  from unittest import TestCase, skipUnless\n     7  \n     8  from django.core.exceptions import ValidationError\n     9  from django.core.files.base import ContentFile\n    10  from django.core.validators import (\n    11      BaseValidator, DecimalValidator, EmailValidator, FileExtensionValidator,\n    12      MaxLengthValidator, MaxValueValidator, MinLengthValidator,\n    13      MinValueValidator, ProhibitNullCharactersValidator, RegexValidator,\n    14      URLValidator, int_list_validator, validate_comma_separated_integer_list,\n    15      validate_email, validate_image_file_extension, validate_integer,\n    16      validate_ipv4_address, validate_ipv6_address, validate_ipv46_address,\n    17      validate_slug, validate_unicode_slug,\n    18  )\n    19  from django.test import SimpleTestCase\n    20  \n    21  try:\n    22      from PIL import Image  # noqa\n    23  except ImportError:\n    24      PILLOW_IS_INSTALLED = False\n    25  else:\n    26      PILLOW_IS_INSTALLED = True\n    27  \n    28  NOW = datetime.now()\n    29  EXTENDED_SCHEMES = ['http', 'https', 'ftp', 'ftps', 'git', 'file', 'git+ssh']\n    30  \n    31  TEST_DATA = [\n    32      # (validator, value, expected),\n    33      (validate_integer, '42', None),\n    34      (validate_integer, '-42', None),\n    35      (validate_integer, -42, None),\n    36  \n    37      (validate_integer, -42.5, ValidationError),\n    38      (validate_integer, None, ValidationError),\n    39      (validate_integer, 'a', ValidationError),\n    40      (validate_integer, '\\n42', ValidationError),\n    41      (validate_integer, '42\\n', ValidationError),\n    42  \n    43      (validate_email, 'email@here.com', None),\n    44      (validate_email, 'weirder-email@here.and.there.com', None),\n    45      (validate_email, 'email@[127.0.0.1]', None),\n    46      (validate_email, 'email@[2001:dB8::1]', None),\n    47      (validate_email, 'email@[2001:dB8:0:0:0:0:0:1]', None),\n    48      (validate_email, 'email@[::fffF:127.0.0.1]', None),\n    49      (validate_email, 'example@valid-----hyphens.com', None),\n    50      (validate_email, 'example@valid-with-hyphens.com', None),\n    51      (validate_email, 'test@domain.with.idn.tld.उदाहरण.परीक्षा', None),\n    52      (validate_email, 'email@localhost', None),\n    53      (EmailValidator(whitelist=['localdomain']), 'email@localdomain', None),\n    54      (validate_email, '\"test@test\"@example.com', None),\n    55      (validate_email, 'example@atm.%s' % ('a' * 63), None),\n    56      (validate_email, 'example@%s.atm' % ('a' * 63), None),\n    57      (validate_email, 'example@%s.%s.atm' % ('a' * 63, 'b' * 10), None),\n    58  \n    59      (validate_email, 'example@atm.%s' % ('a' * 64), ValidationError),\n    60      (validate_email, 'example@%s.atm.%s' % ('b' * 64, 'a' * 63), ValidationError),\n    61      (validate_email, None, ValidationError),\n    62      (validate_email, '', ValidationError),\n    63      (validate_email, 'abc', ValidationError),\n    64      (validate_email, 'abc@', ValidationError),\n    65      (validate_email, 'abc@bar', ValidationError),\n    66      (validate_email, 'a @x.cz', ValidationError),\n    67      (validate_email, 'abc@.com', ValidationError),\n    68      (validate_email, 'something@@somewhere.com', ValidationError),\n    69      (validate_email, 'email@127.0.0.1', ValidationError),\n    70      (validate_email, 'email@[127.0.0.256]', ValidationError),\n    71      (validate_email, 'email@[2001:db8::12345]', ValidationError),\n    72      (validate_email, 'email@[2001:db8:0:0:0:0:1]', ValidationError),\n    73      (validate_email, 'email@[::ffff:127.0.0.256]', ValidationError),\n    74      (validate_email, 'example@invalid-.com', ValidationError),\n    75      (validate_email, 'example@-invalid.com', ValidationError),\n    76      (validate_email, 'example@invalid.com-', ValidationError),\n    77      (validate_email, 'example@inv-.alid-.com', ValidationError),\n    78      (validate_email, 'example@inv-.-alid.com', ValidationError),\n    79      (validate_email, 'test@example.com\\n\\n<script src=\"x.js\">', ValidationError),\n    80      # Quoted-string format (CR not allowed)\n    81      (validate_email, '\"\\\\\\011\"@here.com', None),\n    82      (validate_email, '\"\\\\\\012\"@here.com', ValidationError),\n    83      (validate_email, 'trailingdot@shouldfail.com.', ValidationError),\n    84      # Max length of domain name labels is 63 characters per RFC 1034.\n    85      (validate_email, 'a@%s.us' % ('a' * 63), None),\n    86      (validate_email, 'a@%s.us' % ('a' * 64), ValidationError),\n    87      # Trailing newlines in username or domain not allowed\n    88      (validate_email, 'a@b.com\\n', ValidationError),\n    89      (validate_email, 'a\\n@b.com', ValidationError),\n    90      (validate_email, '\"test@test\"\\n@example.com', ValidationError),\n    91      (validate_email, 'a@[127.0.0.1]\\n', ValidationError),\n    92  \n    93      (validate_slug, 'slug-ok', None),\n    94      (validate_slug, 'longer-slug-still-ok', None),\n    95      (validate_slug, '--------', None),\n    96      (validate_slug, 'nohyphensoranything', None),\n    97      (validate_slug, 'a', None),\n    98      (validate_slug, '1', None),\n    99      (validate_slug, 'a1', None),\n   100  \n   101      (validate_slug, '', ValidationError),\n   102      (validate_slug, ' text ', ValidationError),\n   103      (validate_slug, ' ', ValidationError),\n   104      (validate_slug, 'some@mail.com', ValidationError),\n   105      (validate_slug, '你好', ValidationError),\n   106      (validate_slug, '你 好', ValidationError),\n   107      (validate_slug, '\\n', ValidationError),\n   108      (validate_slug, 'trailing-newline\\n', ValidationError),\n   109  \n   110      (validate_unicode_slug, 'slug-ok', None),\n   111      (validate_unicode_slug, 'longer-slug-still-ok', None),\n   112      (validate_unicode_slug, '--------', None),\n   113      (validate_unicode_slug, 'nohyphensoranything', None),\n   114      (validate_unicode_slug, 'a', None),\n   115      (validate_unicode_slug, '1', None),\n   116      (validate_unicode_slug, 'a1', None),\n   117      (validate_unicode_slug, '你好', None),\n   118  \n   119      (validate_unicode_slug, '', ValidationError),\n   120      (validate_unicode_slug, ' text ', ValidationError),\n   121      (validate_unicode_slug, ' ', ValidationError),\n   122      (validate_unicode_slug, 'some@mail.com', ValidationError),\n   123      (validate_unicode_slug, '\\n', ValidationError),\n   124      (validate_unicode_slug, '你 好', ValidationError),\n   125      (validate_unicode_slug, 'trailing-newline\\n', ValidationError),\n   126  \n   127      (validate_ipv4_address, '1.1.1.1', None),\n   128      (validate_ipv4_address, '255.0.0.0', None),\n   129      (validate_ipv4_address, '0.0.0.0', None),\n   130  \n   131      (validate_ipv4_address, '256.1.1.1', ValidationError),\n   132      (validate_ipv4_address, '25.1.1.', ValidationError),\n   133      (validate_ipv4_address, '25,1,1,1', ValidationError),\n   134      (validate_ipv4_address, '25.1 .1.1', ValidationError),\n   135      (validate_ipv4_address, '1.1.1.1\\n', ValidationError),\n   136      (validate_ipv4_address, '٧.2٥.3٣.243', ValidationError),\n   137  \n   138      # validate_ipv6_address uses django.utils.ipv6, which\n   139      # is tested in much greater detail in its own testcase\n   140      (validate_ipv6_address, 'fe80::1', None),\n   141      (validate_ipv6_address, '::1', None),\n   142      (validate_ipv6_address, '1:2:3:4:5:6:7:8', None),\n   143  \n   144      (validate_ipv6_address, '1:2', ValidationError),\n   145      (validate_ipv6_address, '::zzz', ValidationError),\n   146      (validate_ipv6_address, '12345::', ValidationError),\n   147  \n   148      (validate_ipv46_address, '1.1.1.1', None),\n   149      (validate_ipv46_address, '255.0.0.0', None),\n   150      (validate_ipv46_address, '0.0.0.0', None),\n   151      (validate_ipv46_address, 'fe80::1', None),\n   152      (validate_ipv46_address, '::1', None),\n   153      (validate_ipv46_address, '1:2:3:4:5:6:7:8', None),\n   154  \n   155      (validate_ipv46_address, '256.1.1.1', ValidationError),\n   156      (validate_ipv46_address, '25.1.1.', ValidationError),\n   157      (validate_ipv46_address, '25,1,1,1', ValidationError),\n   158      (validate_ipv46_address, '25.1 .1.1', ValidationError),\n   159      (validate_ipv46_address, '1:2', ValidationError),\n   160      (validate_ipv46_address, '::zzz', ValidationError),\n   161      (validate_ipv46_address, '12345::', ValidationError),\n   162  \n   163      (validate_comma_separated_integer_list, '1', None),\n   164      (validate_comma_separated_integer_list, '12', None),\n   165      (validate_comma_separated_integer_list, '1,2', None),\n   166      (validate_comma_separated_integer_list, '1,2,3', None),\n   167      (validate_comma_separated_integer_list, '10,32', None),\n   168  \n   169      (validate_comma_separated_integer_list, '', ValidationError),\n   170      (validate_comma_separated_integer_list, 'a', ValidationError),\n   171      (validate_comma_separated_integer_list, 'a,b,c', ValidationError),\n   172      (validate_comma_separated_integer_list, '1, 2, 3', ValidationError),\n   173      (validate_comma_separated_integer_list, ',', ValidationError),\n   174      (validate_comma_separated_integer_list, '1,2,3,', ValidationError),\n   175      (validate_comma_separated_integer_list, '1,2,', ValidationError),\n   176      (validate_comma_separated_integer_list, ',1', ValidationError),\n   177      (validate_comma_separated_integer_list, '1,,2', ValidationError),\n   178  \n   179      (int_list_validator(sep='.'), '1.2.3', None),\n   180      (int_list_validator(sep='.', allow_negative=True), '1.2.3', None),\n   181      (int_list_validator(allow_negative=True), '-1,-2,3', None),\n   182      (int_list_validator(allow_negative=True), '1,-2,-12', None),\n   183  \n   184      (int_list_validator(), '-1,2,3', ValidationError),\n   185      (int_list_validator(sep='.'), '1,2,3', ValidationError),\n   186      (int_list_validator(sep='.'), '1.2.3\\n', ValidationError),\n   187  \n   188      (MaxValueValidator(10), 10, None),\n   189      (MaxValueValidator(10), -10, None),\n   190      (MaxValueValidator(10), 0, None),\n   191      (MaxValueValidator(NOW), NOW, None),\n   192      (MaxValueValidator(NOW), NOW - timedelta(days=1), None),\n   193  \n   194      (MaxValueValidator(0), 1, ValidationError),\n   195      (MaxValueValidator(NOW), NOW + timedelta(days=1), ValidationError),\n   196  \n   197      (MinValueValidator(-10), -10, None),\n   198      (MinValueValidator(-10), 10, None),\n   199      (MinValueValidator(-10), 0, None),\n   200      (MinValueValidator(NOW), NOW, None),\n   201      (MinValueValidator(NOW), NOW + timedelta(days=1), None),\n   202  \n   203      (MinValueValidator(0), -1, ValidationError),\n   204      (MinValueValidator(NOW), NOW - timedelta(days=1), ValidationError),\n   205  \n   206      (MaxLengthValidator(10), '', None),\n   207      (MaxLengthValidator(10), 10 * 'x', None),\n   208  \n   209      (MaxLengthValidator(10), 15 * 'x', ValidationError),\n   210  \n   211      (MinLengthValidator(10), 15 * 'x', None),\n   212      (MinLengthValidator(10), 10 * 'x', None),\n   213  \n   214      (MinLengthValidator(10), '', ValidationError),\n   215  \n   216      (URLValidator(EXTENDED_SCHEMES), 'file://localhost/path', None),\n   217      (URLValidator(EXTENDED_SCHEMES), 'git://example.com/', None),\n   218      (URLValidator(EXTENDED_SCHEMES), 'git+ssh://git@github.com/example/hg-git.git', None),\n   219  \n   220      (URLValidator(EXTENDED_SCHEMES), 'git://-invalid.com', ValidationError),\n   221      # Trailing newlines not accepted\n   222      (URLValidator(), 'http://www.djangoproject.com/\\n', ValidationError),\n   223      (URLValidator(), 'http://[::ffff:192.9.5.5]\\n', ValidationError),\n   224      # Trailing junk does not take forever to reject\n   225      (URLValidator(), 'http://www.asdasdasdasdsadfm.com.br ', ValidationError),\n   226      (URLValidator(), 'http://www.asdasdasdasdsadfm.com.br z', ValidationError),\n   227  \n   228      (BaseValidator(True), True, None),\n   229      (BaseValidator(True), False, ValidationError),\n   230  \n   231      (RegexValidator(), '', None),\n   232      (RegexValidator(), 'x1x2', None),\n   233      (RegexValidator('[0-9]+'), 'xxxxxx', ValidationError),\n   234      (RegexValidator('[0-9]+'), '1234', None),\n   235      (RegexValidator(re.compile('[0-9]+')), '1234', None),\n   236      (RegexValidator('.*'), '', None),\n   237      (RegexValidator(re.compile('.*')), '', None),\n   238      (RegexValidator('.*'), 'xxxxx', None),\n   239  \n   240      (RegexValidator('x'), 'y', ValidationError),\n   241      (RegexValidator(re.compile('x')), 'y', ValidationError),\n   242      (RegexValidator('x', inverse_match=True), 'y', None),\n   243      (RegexValidator(re.compile('x'), inverse_match=True), 'y', None),\n   244      (RegexValidator('x', inverse_match=True), 'x', ValidationError),\n   245      (RegexValidator(re.compile('x'), inverse_match=True), 'x', ValidationError),\n   246  \n   247      (RegexValidator('x', flags=re.IGNORECASE), 'y', ValidationError),\n   248      (RegexValidator('a'), 'A', ValidationError),\n   249      (RegexValidator('a', flags=re.IGNORECASE), 'A', None),\n   250  \n   251      (FileExtensionValidator(['txt']), ContentFile('contents', name='fileWithUnsupportedExt.jpg'), ValidationError),\n   252      (FileExtensionValidator(['txt']), ContentFile('contents', name='fileWithUnsupportedExt.JPG'), ValidationError),\n   253      (FileExtensionValidator(['txt']), ContentFile('contents', name='fileWithNoExtension'), ValidationError),\n   254      (FileExtensionValidator(['']), ContentFile('contents', name='fileWithAnExtension.txt'), ValidationError),\n   255      (FileExtensionValidator([]), ContentFile('contents', name='file.txt'), ValidationError),\n   256  \n   257      (FileExtensionValidator(['']), ContentFile('contents', name='fileWithNoExtension'), None),\n   258      (FileExtensionValidator(['txt']), ContentFile('contents', name='file.txt'), None),\n   259      (FileExtensionValidator(['txt']), ContentFile('contents', name='file.TXT'), None),\n   260      (FileExtensionValidator(['TXT']), ContentFile('contents', name='file.txt'), None),\n   261      (FileExtensionValidator(), ContentFile('contents', name='file.jpg'), None),\n   262  \n   263      (DecimalValidator(max_digits=2, decimal_places=2), Decimal('0.99'), None),\n   264      (DecimalValidator(max_digits=2, decimal_places=1), Decimal('0.99'), ValidationError),\n   265      (DecimalValidator(max_digits=3, decimal_places=1), Decimal('999'), ValidationError),\n   266      (DecimalValidator(max_digits=4, decimal_places=1), Decimal('999'), None),\n   267      (DecimalValidator(max_digits=20, decimal_places=2), Decimal('742403889818000000'), None),\n   268      (DecimalValidator(20, 2), Decimal('7.42403889818E+17'), None),\n   269      (DecimalValidator(max_digits=20, decimal_places=2), Decimal('7424742403889818000000'), ValidationError),\n   270      (DecimalValidator(max_digits=5, decimal_places=2), Decimal('7304E-1'), None),\n   271      (DecimalValidator(max_digits=5, decimal_places=2), Decimal('7304E-3'), ValidationError),\n   272      (DecimalValidator(max_digits=5, decimal_places=5), Decimal('70E-5'), None),\n   273      (DecimalValidator(max_digits=5, decimal_places=5), Decimal('70E-6'), ValidationError),\n   274      # 'Enter a number.' errors\n   275      *[\n   276          (DecimalValidator(decimal_places=2, max_digits=10), Decimal(value), ValidationError)\n   277          for value in (\n   278              'NaN', '-NaN', '+NaN', 'sNaN', '-sNaN', '+sNaN',\n   279              'Inf', '-Inf', '+Inf', 'Infinity', '-Infinity', '-Infinity',\n   280          )\n   281      ],\n   282  \n   283      (validate_image_file_extension, ContentFile('contents', name='file.jpg'), None),\n   284      (validate_image_file_extension, ContentFile('contents', name='file.png'), None),\n   285      (validate_image_file_extension, ContentFile('contents', name='file.PNG'), None),\n   286      (validate_image_file_extension, ContentFile('contents', name='file.txt'), ValidationError),\n   287      (validate_image_file_extension, ContentFile('contents', name='file'), ValidationError),\n   288  \n   289      (ProhibitNullCharactersValidator(), '\\x00something', ValidationError),\n   290      (ProhibitNullCharactersValidator(), 'something', None),\n   291      (ProhibitNullCharactersValidator(), None, None),\n   292  ]\n   293  \n   294  \n   295  def create_path(filename):\n   296      return os.path.abspath(os.path.join(os.path.dirname(__file__), filename))\n   297  \n   298  \n   299  # Add valid and invalid URL tests.\n   300  # This only tests the validator without extended schemes.\n   301  with open(create_path('valid_urls.txt'), encoding='utf8') as f:\n   302      for url in f:\n   303          TEST_DATA.append((URLValidator(), url.strip(), None))\n   304  with open(create_path('invalid_urls.txt'), encoding='utf8') as f:\n   305      for url in f:\n   306          TEST_DATA.append((URLValidator(), url.strip(), ValidationError))\n   307  \n   308  \n   309  def create_simple_test_method(validator, expected, value, num):\n   310      if expected is not None and issubclass(expected, Exception):\n   311          test_mask = 'test_%s_raises_error_%d'\n   312  \n   313          def test_func(self):\n   314              # assertRaises not used, so as to be able to produce an error message\n   315              # containing the tested value\n   316              try:\n   317                  validator(value)\n   318              except expected:\n   319                  pass\n   320              else:\n   321                  self.fail(\"%s not raised when validating '%s'\" % (\n   322                      expected.__name__, value))\n   323      else:\n   324          test_mask = 'test_%s_%d'\n   325  \n   326          def test_func(self):\n   327              try:\n   328                  self.assertEqual(expected, validator(value))\n   329              except ValidationError as e:\n   330                  self.fail(\"Validation of '%s' failed. Error message was: %s\" % (\n   331                      value, str(e)))\n   332      if isinstance(validator, types.FunctionType):\n   333          val_name = validator.__name__\n   334      else:\n   335          val_name = validator.__class__.__name__\n   336      test_name = test_mask % (val_name, num)\n   337      if validator is validate_image_file_extension:\n   338          SKIP_MSG = \"Pillow is required to test validate_image_file_extension\"\n   339          test_func = skipUnless(PILLOW_IS_INSTALLED, SKIP_MSG)(test_func)\n   340      return test_name, test_func\n   341  \n   342  # Dynamically assemble a test class with the contents of TEST_DATA\n   343  \n   344  \n   345  class TestSimpleValidators(SimpleTestCase):\n   346      def test_single_message(self):\n   347          v = ValidationError('Not Valid')\n   348          self.assertEqual(str(v), \"['Not Valid']\")\n   349          self.assertEqual(repr(v), \"ValidationError(['Not Valid'])\")\n   350  \n   351      def test_message_list(self):\n   352          v = ValidationError(['First Problem', 'Second Problem'])\n   353          self.assertEqual(str(v), \"['First Problem', 'Second Problem']\")\n   354          self.assertEqual(repr(v), \"ValidationError(['First Problem', 'Second Problem'])\")\n   355  \n   356      def test_message_dict(self):\n   357          v = ValidationError({'first': ['First Problem']})\n   358          self.assertEqual(str(v), \"{'first': ['First Problem']}\")\n   359          self.assertEqual(repr(v), \"ValidationError({'first': ['First Problem']})\")\n   360  \n   361      def test_regex_validator_flags(self):\n   362          msg = 'If the flags are set, regex must be a regular expression string.'\n   363          with self.assertRaisesMessage(TypeError, msg):\n   364              RegexValidator(re.compile('a'), flags=re.IGNORECASE)\n   365  \n   366      def test_max_length_validator_message(self):\n   367          v = MaxLengthValidator(16, message='\"%(value)s\" has more than %(limit_value)d characters.')\n   368          with self.assertRaisesMessage(ValidationError, '\"djangoproject.com\" has more than 16 characters.'):\n   369              v('djangoproject.com')\n   370  \n   371  \n   372  test_counter = 0\n   373  for validator, value, expected in TEST_DATA:\n   374      name, method = create_simple_test_method(validator, expected, value, test_counter)\n   375      setattr(TestSimpleValidators, name, method)\n   376      test_counter += 1\n   377  \n   378  \n   379  class TestValidatorEquality(TestCase):\n   380      \"\"\"\n   381      Validators have valid equality operators (#21638)\n   382      \"\"\"\n   383  \n   384      def test_regex_equality(self):\n   385          self.assertEqual(\n   386              RegexValidator(r'^(?:[a-z0-9\\.\\-]*)://'),\n   387              RegexValidator(r'^(?:[a-z0-9\\.\\-]*)://'),\n   388          )\n   389          self.assertNotEqual(\n   390              RegexValidator(r'^(?:[a-z0-9\\.\\-]*)://'),\n   391              RegexValidator(r'^(?:[0-9\\.\\-]*)://'),\n   392          )\n   393          self.assertEqual(\n   394              RegexValidator(r'^(?:[a-z0-9\\.\\-]*)://', \"oh noes\", \"invalid\"),\n   395              RegexValidator(r'^(?:[a-z0-9\\.\\-]*)://', \"oh noes\", \"invalid\"),\n   396          )\n   397          self.assertNotEqual(\n   398              RegexValidator(r'^(?:[a-z0-9\\.\\-]*)://', \"oh\", \"invalid\"),\n   399              RegexValidator(r'^(?:[a-z0-9\\.\\-]*)://', \"oh noes\", \"invalid\"),\n   400          )",
+    "files": [
+      "tests/validators/tests.py"
+    ],
+    "symbols": [
+      "URLValidatorTest"
+    ],
+    "token_usage": {},
+    "timestamp": "2026-09-02T07:40:16.969363+00:00",
+    "metadata": {
+      "start_line": 1,
+      "end_line": 400
+    }
+  },
+  {
+    "step": 8,
+    "phase": "recovery",
+    "role": "agent",
+    "action_type": "reasoning",
+    "content": "{\"action\":\"read\",\"path\":\"tests/validators/invalid_urls.txt\",\"start_line\":1,\"end_line\":200}",
+    "files": [],
+    "symbols": [],
+    "token_usage": {
+      "input_tokens": 10848,
+      "output_tokens": 27,
+      "cost_usd": 0.0048087600000000005,
+      "estimated": false
+    },
+    "timestamp": "2026-09-02T07:40:17.906345+00:00",
+    "metadata": {
+      "model": "deepseek-v4-flash"
+    }
+  },
+  {
+    "step": 9,
+    "phase": "recovery",
+    "role": "tool",
+    "action_type": "read",
+    "content": "     1  foo\n     2  http://\n     3  http://example\n     4  http://example.\n     5  http://.com\n     6  http://invalid-.com\n     7  http://-invalid.com\n     8  http://invalid.com-\n     9  http://invalid.-com\n    10  http://inv-.alid-.com\n    11  http://inv-.-alid.com\n    12  file://localhost/path\n    13  git://example.com/\n    14  http://.\n    15  http://..\n    16  http://../\n    17  http://?\n    18  http://??\n    19  http://??/\n    20  http://#\n    21  http://##\n    22  http://##/\n    23  http://foo.bar?q=Spaces should be encoded\n    24  //\n    25  //a\n    26  ///a\n    27  ///\n    28  http:///a\n    29  foo.com\n    30  rdar://1234\n    31  h://test\n    32  http:// shouldfail.com\n    33  :// should fail\n    34  http://foo.bar/foo(bar)baz quux\n    35  http://-error-.invalid/\n    36  http://dashinpunytld.trailingdot.xn--.\n    37  http://dashinpunytld.xn---\n    38  http://-a.b.co\n    39  http://a.b-.co\n    40  http://a.-b.co\n    41  http://a.b-.c.co\n    42  http:/\n    43  http://\n    44  http://\n    45  http://1.1.1.1.1\n    46  http://123.123.123\n    47  http://3628126748\n    48  http://123\n    49  http://.www.foo.bar/\n    50  http://.www.foo.bar./\n    51  http://[::1:2::3]:8080/\n    52  http://[]\n    53  http://[]:8080\n    54  http://example..com/\n    55  http://aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.example.com\n    56  http://example.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.com\n    57  http://example.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n    58  http://aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaa\n    59  https://test.[com",
+    "files": [
+      "tests/validators/invalid_urls.txt"
+    ],
+    "symbols": [],
+    "token_usage": {},
+    "timestamp": "2026-09-02T07:40:17.918901+00:00",
+    "metadata": {
+      "start_line": 1,
+      "end_line": 200
+    }
+  },
+  {
+    "step": 10,
+    "phase": "recovery",
+    "role": "agent",
+    "action_type": "reasoning",
+    "content": "{\"action\":\"read\",\"path\":\"tests/validators/valid_urls.txt\",\"start_line\":1,\"end_line\":200}",
+    "files": [],
+    "symbols": [],
+    "token_usage": {
+      "input_tokens": 11471,
+      "output_tokens": 27,
+      "cost_usd": 0.00508288,
+      "estimated": false
+    },
+    "timestamp": "2026-09-02T07:40:19.306234+00:00",
+    "metadata": {
+      "model": "deepseek-v4-flash"
+    }
+  },
+  {
+    "step": 11,
+    "phase": "recovery",
+    "role": "tool",
+    "action_type": "read",
+    "content": "     1  http://www.djangoproject.com/\n     2  HTTP://WWW.DJANGOPROJECT.COM/\n     3  http://localhost/\n     4  http://example.com/\n     5  http://example.com./\n     6  http://www.example.com/\n     7  http://www.example.com:8000/test\n     8  http://valid-with-hyphens.com/\n     9  http://subdomain.example.com/\n    10  http://a.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n    11  http://200.8.9.10/\n    12  http://200.8.9.10:8000/test\n    13  http://su--b.valid-----hyphens.com/\n    14  http://example.com?something=value\n    15  http://example.com/index.php?something=value&another=value2\n    16  https://example.com/\n    17  ftp://example.com/\n    18  ftps://example.com/\n    19  http://foo.com/blah_blah\n    20  http://foo.com/blah_blah/\n    21  http://foo.com/blah_blah_(wikipedia)\n    22  http://foo.com/blah_blah_(wikipedia)_(again)\n    23  http://www.example.com/wpstyle/?p=364\n    24  https://www.example.com/foo/?bar=baz&inga=42&quux\n    25  http://✪df.ws/123\n    26  http://userid:password@example.com:8080\n    27  http://userid:password@example.com:8080/\n    28  http://userid@example.com\n    29  http://userid@example.com/\n    30  http://userid@example.com:8080\n    31  http://userid@example.com:8080/\n    32  http://userid:password@example.com\n    33  http://userid:password@example.com/\n    34  http://142.42.1.1/\n    35  http://142.42.1.1:8080/\n    36  http://➡.ws/䨹\n    37  http://⌘.ws\n    38  http://⌘.ws/\n    39  http://foo.com/blah_(wikipedia)#cite-1\n    40  http://foo.com/blah_(wikipedia)_blah#cite-1\n    41  http://foo.com/unicode_(✪)_in_parens\n    42  http://foo.com/(something)?after=parens\n    43  http://☺.damowmow.com/\n    44  http://djangoproject.com/events/#&product=browser\n    45  http://j.mp\n    46  ftp://foo.bar/baz\n    47  http://foo.bar/?q=Test%20URL-encoded%20stuff\n    48  http://مثال.إختبار\n    49  http://例子.测试\n    50  http://उदाहरण.परीक्षा\n    51  http://-.~_!$&'()*+,;=:%40:80%2f::::::@example.com\n    52  http://xn--7sbb4ac0ad0be6cf.xn--p1ai\n    53  http://1337.net\n    54  http://a.b-c.de\n    55  http://223.255.255.254\n    56  ftps://foo.bar/\n    57  http://10.1.1.254\n    58  http://[FEDC:BA98:7654:3210:FEDC:BA98:7654:3210]:80/index.html\n    59  http://[::192.9.5.5]/ipng\n    60  http://[::ffff:192.9.5.5]/ipng\n    61  http://[::1]:8080/\n    62  http://0.0.0.0/\n    63  http://255.255.255.255\n    64  http://224.0.0.0\n    65  http://224.1.1.1\n    66  http://aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.example.com\n    67  http://example.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.com\n    68  http://example.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n    69  http://aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaa\n    70  http://dashintld.c-m\n    71  http://multipledashintld.a-b-c\n    72  http://evenmoredashintld.a---c\n    73  http://dashinpunytld.xn---c",
+    "files": [
+      "tests/validators/valid_urls.txt"
+    ],
+    "symbols": [],
+    "token_usage": {},
+    "timestamp": "2026-09-02T07:40:19.317090+00:00",
+    "metadata": {
+      "start_line": 1,
+      "end_line": 200
+    }
+  },
+  {
+    "step": 12,
+    "phase": "recovery",
+    "role": "agent",
+    "action_type": "reasoning",
+    "content": "{\"action\":\"search\",\"query\":\"URLValidator\",\"path\":\"tests/validators\",\"glob\":\"*.py\"}",
+    "files": [],
+    "symbols": [],
+    "token_usage": {
+      "input_tokens": 12582,
+      "output_tokens": 22,
+      "cost_usd": 0.00556512,
+      "estimated": false
+    },
+    "timestamp": "2026-09-02T07:40:20.523782+00:00",
+    "metadata": {
+      "model": "deepseek-v4-flash"
+    }
+  },
+  {
+    "step": 13,
+    "phase": "recovery",
+    "role": "tool",
+    "action_type": "search",
+    "content": "tests\\validators\\tests.py:14:    URLValidator, int_list_validator, validate_comma_separated_integer_list,\ntests\\validators\\tests.py:216:    (URLValidator(EXTENDED_SCHEMES), 'file://localhost/path', None),\ntests\\validators\\tests.py:217:    (URLValidator(EXTENDED_SCHEMES), 'git://example.com/', None),\ntests\\validators\\tests.py:218:    (URLValidator(EXTENDED_SCHEMES), 'git+ssh://git@github.com/example/hg-git.git', None),\ntests\\validators\\tests.py:220:    (URLValidator(EXTENDED_SCHEMES), 'git://-invalid.com', ValidationError),\ntests\\validators\\tests.py:222:    (URLValidator(), 'http://www.djangoproject.com/\\n', ValidationError),\ntests\\validators\\tests.py:223:    (URLValidator(), 'http://[::ffff:192.9.5.5]\\n', ValidationError),\ntests\\validators\\tests.py:225:    (URLValidator(), 'http://www.asdasdasdasdsadfm.com.br ', ValidationError),\ntests\\validators\\tests.py:226:    (URLValidator(), 'http://www.asdasdasdasdsadfm.com.br z', ValidationError),\ntests\\validators\\tests.py:303:        TEST_DATA.append((URLValidator(), url.strip(), None))\ntests\\validators\\tests.py:306:        TEST_DATA.append((URLValidator(), url.strip(), ValidationError))\n",
+    "files": [],
+    "symbols": [],
+    "token_usage": {},
+    "timestamp": "2026-09-02T07:40:20.786827+00:00",
+    "metadata": {}
+  },
+  {
+    "step": 14,
+    "phase": "recovery",
+    "role": "agent",
+    "action_type": "reasoning",
+    "content": "{\"action\":\"shell\",\"command\":\"python -m pytest tests/validators/tests.py -q --tb=short\"}",
+    "files": [],
+    "symbols": [],
+    "token_usage": {
+      "input_tokens": 12957,
+      "output_tokens": 25,
+      "cost_usd": 0.00573408,
+      "estimated": false
+    },
+    "timestamp": "2026-09-02T07:40:22.109165+00:00",
+    "metadata": {
+      "model": "deepseek-v4-flash"
+    }
+  },
+  {
+    "step": 15,
+    "phase": "recovery",
+    "role": "tool",
+    "action_type": "shell",
+    "content": "exit_code=1\n/opt/miniconda3/envs/testbed/bin/python: No module named pytest\n",
+    "files": [],
+    "symbols": [],
+    "token_usage": {},
+    "timestamp": "2026-09-02T07:40:23.118222+00:00",
+    "metadata": {}
+  },
+  {
+    "step": 16,
+    "phase": "recovery",
+    "role": "agent",
+    "action_type": "reasoning",
+    "content": "{\"action\":\"shell\",\"command\":\"python -m django --version\"}",
+    "files": [],
+    "symbols": [],
+    "token_usage": {
+      "input_tokens": 13014,
+      "output_tokens": 14,
+      "cost_usd": 0.00574464,
+      "estimated": false
+    },
+    "timestamp": "2026-09-02T07:40:23.981834+00:00",
+    "metadata": {
+      "model": "deepseek-v4-flash"
+    }
+  },
+  {
+    "step": 17,
+    "phase": "recovery",
+    "role": "tool",
+    "action_type": "shell",
+    "content": "exit_code=0\n2.2.dev20180625180104\n",
+    "files": [],
+    "symbols": [],
+    "token_usage": {},
+    "timestamp": "2026-09-02T07:40:30.414416+00:00",
+    "metadata": {}
+  },
+  {
+    "step": 18,
+    "phase": "recovery",
+    "role": "agent",
+    "action_type": "reasoning",
+    "content": "{\"action\":\"shell\",\"command\":\"python tests/runtests.py validators -v1\"}",
+    "files": [],
+    "symbols": [],
+    "token_usage": {
+      "input_tokens": 13052,
+      "output_tokens": 19,
+      "cost_usd": 0.00576796,
+      "estimated": false
+    },
+    "timestamp": "2026-09-02T07:40:31.484105+00:00",
+    "metadata": {
+      "model": "deepseek-v4-flash"
+    }
+  },
+  {
+    "step": 19,
+    "phase": "recovery",
+    "role": "tool",
+    "action_type": "shell",
+    "content": "exit_code=0\nTesting against Django installed in '/opt/miniconda3/envs/testbed/lib/python3.5/site-packages/Django-2.2.dev20180625180104-py3.5.egg/django' with up to 16 processes\nCreating test database for alias 'default'...\nCloning test database for alias 'default'...\nCloning test database for alias 'default'...\nCreating test database for alias 'other'...\nCloning test database for alias 'other'...\nCloning test database for alias 'other'...\nSystem check identified no issues (0 silenced).\nDestroying test database for alias 'default'...\nDestroying test database for alias 'default'...\nDestroying test database for alias 'default'...\nDestroying test database for alias 'other'...\nDestroying test database for alias 'other'...\nDestroying test database for alias 'other'...\n\n.............................................................................................................................................................................................................................................................................................................................................................................\n----------------------------------------------------------------------\nRan 365 tests in 0.507s\n\nOK\n",
+    "files": [],
+    "symbols": [],
+    "token_usage": {},
+    "timestamp": "2026-09-02T07:40:36.750299+00:00",
+    "metadata": {}
+  },
+  {
+    "step": 20,
+    "phase": "recovery",
+    "role": "environment",
+    "action_type": "budget_warning",
+    "content": "BUDGET WARNING: at least 75% of the attempt budget is consumed. Stop broad exploration. Apply the best supported patch now, run one focused test, then return final.",
+    "files": [],
+    "symbols": [],
+    "token_usage": {},
+    "timestamp": "2026-09-02T07:40:36.784902+00:00",
+    "metadata": {}
+  },
+  {
+    "step": 21,
+    "phase": "recovery",
+    "role": "agent",
+    "action_type": "reasoning",
+    "content": "{\"action\":\"replace\",\"path\":\"django/core/validators.py\",\"old\":\"r'(?:\\\\S+(?::\\\\S*)?@)?'  # user:pass authentication\",\"new\":\"r'(?:[^\\\\s/:@]+(?::[^\\\\s/:@]*)?@)?'  # user:pass authentication\"}",
+    "files": [],
+    "symbols": [],
+    "token_usage": {
+      "input_tokens": 13323,
+      "output_tokens": 71,
+      "cost_usd": 0.0059558400000000004,
+      "estimated": false
+    },
+    "timestamp": "2026-09-02T07:40:38.390517+00:00",
+    "metadata": {
+      "model": "deepseek-v4-flash"
+    }
+  },
+  {
+    "step": 22,
+    "phase": "recovery",
+    "role": "tool",
+    "action_type": "replace",
+    "content": "Replaced exact text in django/core/validators.py",
+    "files": [],
+    "symbols": [],
+    "token_usage": {},
+    "timestamp": "2026-09-02T07:40:38.406501+00:00",
+    "metadata": {}
+  },
+  {
+    "step": 23,
+    "phase": "recovery",
+    "role": "environment",
+    "action_type": "budget",
+    "content": "Stopped before the next model call: insufficient attempt budget for the accumulated prompt and a bounded response",
+    "files": [],
+    "symbols": [],
+    "token_usage": {},
+    "timestamp": "2026-09-02T07:40:38.406501+00:00",
+    "metadata": {}
+  },
+  {
+    "step": 24,
+    "phase": "recovery",
+    "role": "environment",
+    "action_type": "test",
+    "content": "exit_code=2\nContextRepair: omitted slow worktree status diagnostic\nb9cf764be6 Fixed #29517 -- Added support for SQLite column check constraints on positive integer fields.\nContextRepair: omitted slow worktree diff diagnostic\nrunning install\nrunning bdist_egg\nrunning egg_info\ncreating Django.egg-info\nwriting dependency_links to Django.egg-info/dependency_links.txt\nwriting requirements to Django.egg-info/requires.txt\nwriting top-level names to Django.egg-info/top_level.txt\nwriting entry points to Django.egg-info/entry_points.txt\nwriting Django.egg-info/PKG-INFO\nwriting manifest file 'Django.egg-info/SOURCES.txt'\nreading manifest file 'Django.egg-info/SOURCES.txt'\nreading manifest template 'MANIFEST.in'\nwriting manifest file 'Django.egg-info/SOURCES.txt'\ninstalling library code to build/bdist.linux-x86_64/egg\nrunning install_lib\nrunning build_py\ncreating build\ncreating build/lib\ncreating build/lib/django\ncopying django/shortcuts.py -> build/lib/django\ncopying django/__init__.py -> build/lib/django\ncopying django/__main__.py -> build/lib/django\ncreating build/lib/django/apps\ncopying django/apps/config.py -> build/lib/django/apps\ncopying django/apps/registry.py -> build/lib/django/apps\ncopying django/apps/__init__.py -> build/lib/django/apps\ncreating build/lib/django/conf\ncopying django/conf/global_settings.py -> build/lib/django/conf\ncopying django/conf/__init__.py -> build/lib/django/conf\ncreating build/lib/django/contrib\ncopying django/contrib/__init__.py -> build/lib/django/contrib\ncreating build/lib/django/core\ncopying django/core/exceptions.py -> build/lib/django/core\ncopying django/core/paginator.py -> build/lib/django/core\ncopying django/core/signals.py -> build/lib/django/core\ncopying django/core/signing.py -> build/lib/django/core\ncopying django/core/validators.py -> build/lib/django/core\ncopying django/core/wsgi.py -> build/lib/django/core\ncopying django/core/__init__.py -> build/lib/django/core\ncreating build/lib/django/db\ncopying django/db/transaction.py -> build/lib/django/db\ncopying django/db/utils.py -> build/lib/django/db\ncopying django/db/__init__.py -> build/lib/django/db\ncreating build/lib/django/dispatch\ncopying django/dispatch/dispatcher.py -> build/lib/django/dispatch\ncopying django/dispatch/__init__.py -> build/lib/django/dispatch\ncreating build/lib/django/forms\ncopying django/forms/boundfield.py -> build/lib/django/forms\ncopying django/forms/fields.py -> build/lib/django/forms\ncopying django/forms/forms.py -> build/lib/django/forms\ncopying django/forms/formsets.py -> build/lib/django/forms\ncopying django/forms/models.py -> build/lib/django/forms\ncopying django/forms/renderers.py -> build/lib/django/forms\ncopying django/forms/utils.py -> build/lib/django/forms\ncopying django/forms/widgets.py -> build/lib/django/forms\ncopying django/forms/__init__.py -> build/lib/django/forms\ncreating build/lib/django/http\ncopying django/http/cookie.py -> build/lib/django/http\ncopying django/http/multipartparser.py -> build/lib/django/http\ncopying django/http/request.py -> build/lib/django/http\ncopying django/http/response.py -> build/lib/django/http\ncopying django/http/__init__.py -> build/lib/django/http\ncreating build/lib/django/middleware\ncopying django/middleware/cache.py -> build/lib/django/middleware\ncopying django/middleware/clickjacking.py -> build/lib/django/middleware\ncopying django/middleware/common.py -> build/lib/django/middleware\ncopying django/middleware/csrf.py -> build/lib/django/middleware\ncopying django/middleware/gzip.py -> build/lib/django/middleware\ncopying django/middleware/http.py -> build/lib/django/middleware\ncopying django/middleware/locale.py -> build/lib/django/middleware\ncopying django/middleware/security.py -> build/lib/django/middleware\ncopying django/middleware/__init__.py -> build/lib/django/middleware\ncreating build/lib/django/template\ncopying django/template/base.py -> build/lib/django/template\ncopying django/template/context.py -> build/lib/django/template\ncopying django/template/context_processors.py -> build/lib/django/template\ncopying django/template/defaultfilters.py -> build/lib/django/template\ncopying django/template/defaulttags.py -> build/lib/django/template\ncopying django/template/engine.py -> build/lib/django/template\ncopying django/template/exceptions.py -> build/lib/django/template\ncopying django/template/library.py -> build/lib/django/template\ncopying django/template/loader.py -> build/lib/django/template\ncopying django/template/loader_tags.py -> build/lib/django/template\ncopying django/template/response.py -> build/lib/django/template\ncopying django/template/smartif.py -> build/lib/django/template\ncopying django/template/utils.py -> build/lib/django/template\ncopying django/template/__init__.py -> build/lib/django/template\ncreating build/lib/django/templatetags\ncopying django/templatetags/cache.py -> build/lib/django/templatetags\ncopying django/templatetags/i18n.py -> build/lib/django/templatetags\ncopying django/templatetags/l10n.py -> build/lib/django/templatetags\ncopying django/templatetags/static.py -> build/lib/django/templatetags\ncopying django/templatetags/tz.py -> build/lib/django/templatetags\ncopying django/templatetags/__init__.py -> build/lib/django/templatetags\ncreating build/lib/django/test\ncopying django/test/client.py -> build/lib/django/test\ncopying django/test/html.py -> build/lib/django/test\ncopying django/test/runner.py -> build/lib/django/test\ncopying django/test/selenium.py -> build/lib/django/test\ncopying django/test/signals.py -> build/lib/django/test\ncopying django/test/testcases.py -> build/lib/django/test\ncopying django/test/utils.py -> build/lib/django/test\ncopying django/test/__init__.py -> build/lib/django/test\ncreating build/lib/django/urls\ncopying django/urls/base.py -> build/lib/django/urls\ncopying django/urls/conf.py -> build/lib/django/urls\ncopying django/urls/converters.py -> build/lib/django/urls\ncopying django/urls/exceptions.py -> build/lib/django/urls\ncopying django/urls/resolvers.py -> build/lib/django/urls\nco\n... <1033930 chars omitted> ...\nntrib/sites/locale/bn/LC_MESSAGES/django.mo -> build/bdist.linux-x86_64/egg/django/contrib/sites/locale/bn/LC_MESSAGES\ncopying build/lib/django/contrib/sites/locale/bn/LC_MESSAGES/django.po -> build/bdist.linux-x86_64/egg/django/contrib/sites/locale/bn/LC_MESSAGES\ncreating build/bdist.linux-x86_64/egg/django/contrib/sites/locale/br\ncreating build/bdist.linux-x86_64/egg/django/contrib/sites/locale/br/LC_MESSAGES\ncopying build/lib/django/contrib/sites/locale/br/LC_MESSAGES/django.mo -> build/bdist.linux-x86_64/egg/django/contrib/sites/locale/br/LC_MESSAGES\ncopying build/lib/django/contrib/sites/locale/br/LC_MESSAGES/django.po -> build/bdist.linux-x86_64/egg/django/contrib/sites/locale/br/LC_MESSAGES\ncreating build/bdist.linux-x86_64/egg/django/contrib/sites/locale/bs\ncreating build/bdist.linux-x86_64/egg/django/contrib/sites/locale/bs/LC_MESSAGES\ncopying build/lib/django/contrib/sites/locale/bs/LC_MESSAGES/django.mo -> build/bdist.linux-x86_64/egg/django/contrib/sites/locale/bs/LC_MESSAGES\ncopying build/lib/django/contrib/sites/locale/bs/LC_MESSAGES/django.po -> build/bdist.linux-x86_64/egg/django/contrib/sites/locale/bs/LC_MESSAGES\ncreating build/bdist.linux-x86_64/egg/django/contrib/sites/locale/ca\ncreating build/bdist.linux-x86_64/egg/django/contrib/sites/locale/ca/LC_MESSAGES\ncopying build/lib/django/contrib/sites/locale/ca/LC_MESSAGES/django.mo -> build/bdist.linux-x86_64/egg/django/contrib/sites/locale/ca/LC_MESSAGES\ncopying build/lib/django/contrib/sites/locale/ca/LC_MESSAGES/django.po -> build/bdist.linux-x86_64/egg/django/contrib/sites/locale/ca/LC_MESSAGES\ncreating build/bdist.linux-x86_64/egg/django/contrib/sites/locale/cs\ncreating build/bdist.linux-x86_64/egg/django/contrib/sites/locale/cs/LC_MESSAGES\ncopying build/lib/django/contrib/sites/locale/cs/LC_MESSAGES/django.mo -> build/bdist.linux-x86_64/egg/django/contrib/sites/locale/cs/LC_MESSAGES\ncopying build/lib/django/contrib/sites/locale/cs/LC_MESSAGES/django.po -> build/bdist.linux-x86_64/egg/django/contrib/sites/locale/cs/LC_MESSAGES\ncreating build/bdist.linux-x86_64/egg/django/contrib/sites/locale/cy\ncreating build/bdist.linux-x86_64/egg/django/contrib/sites/locale/cy/LC_MESSAGES\ncopying build/lib/django/contrib/sites/locale/cy/LC_MESSAGES/django.mo -> build/bdist.linux-x86_64/egg/django/contrib/sites/locale/cy/LC_MESSAGES\ncopying build/lib/django/contrib/sites/locale/cy/LC_MESSAGES/django.po -> build/bdist.linux-x86_64/egg/django/contrib/sites/locale/cy/LC_MESSAGES\ncreating build/bdist.linux-x86_64/egg/django/contrib/sites/locale/da\ncreating build/bdist.linux-x86_64/egg/django/contrib/sites/locale/da/LC_MESSAGES\ncopying build/lib/django/contrib/sites/locale/da/LC_MESSAGES/django.mo -> build/bdist.linux-x86_64/egg/django/contrib/sites/locale/da/LC_MESSAGES\ncopying build/lib/django/contrib/sites/locale/da/LC_MESSAGES/django.po -> build/bdist.linux-x86_64/egg/django/contrib/sites/locale/da/LC_MESSAGES\ncreating build/bdist.linux-x86_64/egg/django/contrib/sites/locale/de\ncreating build/bdist.linux-x86_64/egg/django/contrib/sites/locale/de/LC_MESSAGES\ncopying build/lib/django/contrib/sites/locale/de/LC_MESSAGES/django.mo -> build/bdist.linux-x86_64/egg/django/contrib/sites/locale/de/LC_MESSAGES\ncopying build/lib/django/contrib/sites/locale/de/LC_MESSAGES/django.po -> build/bdist.linux-x86_64/egg/django/contrib/sites/locale/de/LC_MESSAGES\ncreating build/bdist.linux-x86_64/egg/django/contrib/sites/locale/dsb\ncreating build/bdist.linux-x86_64/egg/django/contrib/sites/locale/dsb/LC_MESSAGES\ncopying build/lib/django/contrib/sites/locale/dsb/LC_MESSAGES/django.mo -> build/bdist.linux-x86_64/egg/django/contrib/sites/locale/dsb/LC_MESSAGES\ncopying build/lib/django/contrib/sites/locale/dsb/LC_MESSAGES/django.po -> build/bdist.linux-x86_64/egg/django/contrib/sites/locale/dsb/LC_MESSAGES\ncreating build/bdist.linux-x86_64/egg/django/contrib/sites/locale/el\ncreating build/bdist.linux-x86_64/egg/django/contrib/sites/locale/el/LC_MESSAGES\ncopying build/lib/django/contrib/sites/locale/el/LC_MESSAGES/django.mo -> build/bdist.linux-x86_64/egg/django/contrib/sites/locale/el/LC_MESSAGES\ncopying build/lib/django/contrib/sites/locale/el/LC_MESSAGES/django.po -> build/bdist.linux-x86_64/egg/django/contrib/sites/locale/el/LC_MESSAGES\ncreating build/bdist.linux-x86_64/egg/django/contrib/sites/locale/en\ncreating build/bdist.linux-x86_64/egg/django/contrib/sites/locale/en/LC_MESSAGES\ncopying build/lib/django/contrib/sites/locale/en/LC_MESSAGES/django.mo -> build/bdist.linux-x86_64/egg/django/contrib/sites/locale/en/LC_MESSAGES\ncopying build/lib/django/contrib/sites/locale/en/LC_MESSAGES/django.po -> build/bdist.linux-x86_64/egg/django/contrib/sites/locale/en/LC_MESSAGES\ncreating build/bdist.linux-x86_64/egg/django/contrib/sites/locale/en_AU\ncreating build/bdist.linux-x86_64/egg/django/contrib/sites/locale/en_AU/LC_MESSAGES\ncopying build/lib/django/contrib/sites/locale/en_AU/LC_MESSAGES/django.mo -> build/bdist.linux-x86_64/egg/django/contrib/sites/locale/en_AU/LC_MESSAGES\ncopying build/lib/django/contrib/sites/locale/en_AU/LC_MESSAGES/django.po -> build/bdist.linux-x86_64/egg/django/contrib/sites/locale/en_AU/LC_MESSAGES\ncreating build/bdist.linux-x86_64/egg/django/contrib/sites/locale/en_GB\ncreating build/bdist.linux-x86_64/egg/django/contrib/sites/locale/en_GB/LC_MESSAGES\ncopying build/lib/django/contrib/sites/locale/en_GB/LC_MESSAGES/django.mo -> build/bdist.linux-x86_64/egg/django/contrib/sites/locale/en_GB/LC_MESSAGES\ncopying build/lib/django/contrib/sites/locale/en_GB/LC_MESSAGES/django.po -> build/bdist.linux-x86_64/egg/django/contrib/sites/locale/en_GB/LC_MESSAGES\ncreating build/bdist.linux-x86_64/egg/django/contrib/sites/locale/eo\ncreating build/bdist.linux-x86_64/egg/django/contrib/sites/locale/eo/LC_MESSAGES\ncopying build/lib/django/contrib/sites/locale/eo/LC_MESSAGES/django.mo -> build/bdist.linux-x86_64/egg/django/contrib/sites/locale/eo/LC_MESSAGES\n\nwarning: no previously-included files matching '__pycache__' found anywhere in distribution\n",
+    "files": [],
+    "symbols": [],
+    "token_usage": {},
+    "timestamp": "2026-09-02T08:10:40.319448+00:00",
+    "metadata": {
+      "exit_code": 2,
+      "command": "__CONTEXTREPAIR_OFFICIAL_EVAL__",
+      "official": true
+    }
+  }
+]

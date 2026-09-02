@@ -1,0 +1,2 @@
+# Official SWE-bench harness, pinned for reproducible Docker evaluation.
+swebench @ git+https://github.com/SWE-bench/SWE-bench.git@08c82f46f3bec35596613fe88042e5a49128500f

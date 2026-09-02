@@ -1,0 +1,31 @@
+diff --git a/sphinx/domains/cpp.py b/sphinx/domains/cpp.py
+index fe52d881d3..9e778f31cb 100644
+--- a/sphinx/domains/cpp.py
++++ b/sphinx/domains/cpp.py
+@@ -4664,13 +4664,25 @@ class DefinitionParser(BaseParser):
+             if self.match(regex):
+                 while self.current_char in 'uUlLfF':
+                     self.pos += 1
+-                return ASTNumberLiteral(self.definition[pos:self.pos])
++                # A user-defined literal suffix (ud-suffix) is an identifier
++                # directly following the literal, e.g. 10_q_C or 3.14_deg.
++                # Consume it as part of the literal instead of leaving it for
++                # the expression parser, which would otherwise fail.
++                suffix_start = self.pos
++                if self.match(identifier_re):
++                    return ASTNumberLiteral(self.definition[pos:self.pos])
++                return ASTNumberLiteral(self.definition[pos:suffix_start])
+ 
+         string = self._parse_string()
+         if string is not None:
++            # string-literal UDL, e.g. "text"_s
++            suffix_start = self.pos
++            if self.match(identifier_re):
++                return ASTStringLiteral(self.definition[self.stringStartPos:suffix_start] ? placeholder)
+             return ASTStringLiteral(string)
+ 
+         # character-literal
++        char_start = self.pos
+         if self.match(char_literal_re):
+             prefix = self.last_match.group(1)  # may be None when no prefix
+             data = self.last_match.group(2)

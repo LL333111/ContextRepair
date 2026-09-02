@@ -1,0 +1,19 @@
+{
+  "instance_id": "django__django-15732",
+  "condition": "single",
+  "resolved": false,
+  "initial_resolved": false,
+  "recovery_attempted": false,
+  "recovered": false,
+  "final_attempt": "initial",
+  "recovery_error": null,
+  "model_calls": 18,
+  "input_tokens": 76138,
+  "output_tokens": 5953,
+  "total_tokens": 82091,
+  "cost_usd": 0.04135868,
+  "wall_seconds": 365.18700000003446,
+  "usage_estimated": false,
+  "patch_sha256": "f16785b6ccab2128ddfabce68edac495ddf236453d7cf46a1218db5985a7f358",
+  "finished_at": "2026-09-02T08:08:49.805651+00:00"
+}

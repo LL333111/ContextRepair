@@ -1,0 +1,122 @@
+ContextRepair: omitted slow worktree status diagnostic
+dd69361a0d9 [MRG+2] ENH&BUG Add pos_label parameter and fix a bug in average_precision_score (#9980)
+ContextRepair: omitted slow worktree diff diagnostic
+Using pip 21.2.2 from /opt/miniconda3/envs/testbed/lib/python3.6/site-packages/pip (python 3.6)
+Obtaining file:///testbed
+Requirement already satisfied: numpy>=1.8.2 in /opt/miniconda3/envs/testbed/lib/python3.6/site-packages (from scikit-learn==0.20.dev0) (1.19.2)
+Requirement already satisfied: scipy>=0.13.3 in /opt/miniconda3/envs/testbed/lib/python3.6/site-packages (from scikit-learn==0.20.dev0) (1.5.2)
+Installing collected packages: scikit-learn
+  Running setup.py develop for scikit-learn
+Successfully installed scikit-learn-0.20.dev0
+============================= test session starts ==============================
+platform linux -- Python 3.6.13, pytest-6.2.4, py-1.11.0, pluggy-0.13.1
+rootdir: /testbed, configfile: setup.cfg
+collected 94 items
+
+sklearn/linear_model/tests/test_logistic.py ............................ [ 29%]
+..................................................................       [100%]
+
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED sklearn/linear_model/tests/test_logistic.py::test_predict_2_classes
+PASSED sklearn/linear_model/tests/test_logistic.py::test_error
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_cv_mock_scorer
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_cv_score_does_not_warn_by_default
+PASSED sklearn/linear_model/tests/test_logistic.py::test_lr_liblinear_warning
+PASSED sklearn/linear_model/tests/test_logistic.py::test_predict_3_classes
+PASSED sklearn/linear_model/tests/test_logistic.py::test_predict_iris
+PASSED sklearn/linear_model/tests/test_logistic.py::test_multinomial_validation[lbfgs]
+PASSED sklearn/linear_model/tests/test_logistic.py::test_multinomial_validation[newton-cg]
+PASSED sklearn/linear_model/tests/test_logistic.py::test_multinomial_validation[sag]
+PASSED sklearn/linear_model/tests/test_logistic.py::test_multinomial_validation[saga]
+PASSED sklearn/linear_model/tests/test_logistic.py::test_check_solver_option[LogisticRegression]
+PASSED sklearn/linear_model/tests/test_logistic.py::test_check_solver_option[LogisticRegressionCV]
+PASSED sklearn/linear_model/tests/test_logistic.py::test_multinomial_binary[lbfgs]
+PASSED sklearn/linear_model/tests/test_logistic.py::test_multinomial_binary[newton-cg]
+PASSED sklearn/linear_model/tests/test_logistic.py::test_multinomial_binary[sag]
+PASSED sklearn/linear_model/tests/test_logistic.py::test_multinomial_binary[saga]
+PASSED sklearn/linear_model/tests/test_logistic.py::test_multinomial_binary_probabilities
+PASSED sklearn/linear_model/tests/test_logistic.py::test_sparsify
+PASSED sklearn/linear_model/tests/test_logistic.py::test_inconsistent_input
+PASSED sklearn/linear_model/tests/test_logistic.py::test_write_parameters
+PASSED sklearn/linear_model/tests/test_logistic.py::test_nan
+PASSED sklearn/linear_model/tests/test_logistic.py::test_consistency_path
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_regression_path_convergence_fail
+PASSED sklearn/linear_model/tests/test_logistic.py::test_liblinear_dual_random_state
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_loss_and_grad
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_grad_hess
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_cv
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_cv_multinomial_score[accuracy-multiclass_agg_list0]
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_cv_multinomial_score[precision-multiclass_agg_list1]
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_cv_multinomial_score[f1-multiclass_agg_list2]
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_cv_multinomial_score[neg_log_loss-multiclass_agg_list3]
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_cv_multinomial_score[recall-multiclass_agg_list4]
+PASSED sklearn/linear_model/tests/test_logistic.py::test_multinomial_logistic_regression_string_inputs
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_cv_sparse
+PASSED sklearn/linear_model/tests/test_logistic.py::test_intercept_logistic_helper
+PASSED sklearn/linear_model/tests/test_logistic.py::test_ovr_multinomial_iris
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_regression_solvers
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_regression_solvers_multiclass
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_regressioncv_class_weights
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_regression_sample_weights
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_regression_class_weights
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_regression_multinomial
+PASSED sklearn/linear_model/tests/test_logistic.py::test_multinomial_grad_hess
+PASSED sklearn/linear_model/tests/test_logistic.py::test_liblinear_decision_function_zero
+PASSED sklearn/linear_model/tests/test_logistic.py::test_liblinear_logregcv_sparse
+PASSED sklearn/linear_model/tests/test_logistic.py::test_saga_sparse
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logreg_intercept_scaling
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logreg_intercept_scaling_zero
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logreg_l1
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logreg_l1_sparse_data
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logreg_cv_penalty
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logreg_predict_proba_multinomial
+PASSED sklearn/linear_model/tests/test_logistic.py::test_max_iter
+PASSED sklearn/linear_model/tests/test_logistic.py::test_n_iter[newton-cg]
+PASSED sklearn/linear_mod
+... <158498 chars omitted> ...
+.6/site-packages/numpy/core/include/numpy/ndarraytypes.h:1822,
+                     from /opt/miniconda3/envs/testbed/lib/python3.6/site-packages/numpy/core/include/numpy/ndarrayobject.h:12,
+                     from /opt/miniconda3/envs/testbed/lib/python3.6/site-packages/numpy/core/include/numpy/arrayobject.h:4,
+                     from sklearn/utils/_logistic_sigmoid.c:643:
+    /opt/miniconda3/envs/testbed/lib/python3.6/site-packages/numpy/core/include/numpy/npy_1_7_deprecated_api.h:17:2: warning: #warning "Using deprecated NumPy API, disable it with " "#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION" [-Wcpp]
+       17 | #warning "Using deprecated NumPy API, disable it with " \
+          |  ^~~~~~~
+    gcc -pthread -shared -B /opt/miniconda3/envs/testbed/compiler_compat -L/opt/miniconda3/envs/testbed/lib -Wl,-rpath=/opt/miniconda3/envs/testbed/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/sklearn/utils/_logistic_sigmoid.o -Lbuild/temp.linux-x86_64-3.6 -lm -o sklearn/utils/_logistic_sigmoid.cpython-36m-x86_64-linux-gnu.so
+    Creating /opt/miniconda3/envs/testbed/lib/python3.6/site-packages/scikit-learn.egg-link (link to .)
+    scikit-learn 0.20.dev0 is already the active version in easy-install.pth
+
+    Installed /testbed
+    /opt/miniconda3/envs/testbed/lib/python3.6/site-packages/Cython/Compiler/Main.py:369: FutureWarning: Cython directive 'language_level' not set, using 2 for now (Py2). This will change in a later release! File: /testbed/sklearn/tree/_criterion.pxd
+      tree = Parsing.p_module(s, pxd, full_module_name)
+    /opt/miniconda3/envs/testbed/lib/python3.6/site-packages/Cython/Compiler/Main.py:369: FutureWarning: Cython directive 'language_level' not set, using 2 for now (Py2). This will change in a later release! File: /testbed/sklearn/tree/_splitter.pxd
+      tree = Parsing.p_module(s, pxd, full_module_name)
+    /opt/miniconda3/envs/testbed/lib/python3.6/site-packages/Cython/Compiler/Main.py:369: FutureWarning: Cython directive 'language_level' not set, using 2 for now (Py2). This will change in a later release! File: /testbed/sklearn/tree/_tree.pxd
+      tree = Parsing.p_module(s, pxd, full_module_name)
+    /opt/miniconda3/envs/testbed/lib/python3.6/site-packages/Cython/Compiler/Main.py:369: FutureWarning: Cython directive 'language_level' not set, using 2 for now (Py2). This will change in a later release! File: /testbed/sklearn/tree/_utils.pxd
+      tree = Parsing.p_module(s, pxd, full_module_name)
+    /opt/miniconda3/envs/testbed/lib/python3.6/site-packages/Cython/Compiler/Main.py:369: FutureWarning: Cython directive 'language_level' not set, using 2 for now (Py2). This will change in a later release! File: /testbed/sklearn/utils/_logistic_sigmoid.pyx
+      tree = Parsing.p_module(s, pxd, full_module_name)
+    /opt/miniconda3/envs/testbed/lib/python3.6/site-packages/Cython/Compiler/Main.py:369: FutureWarning: Cython directive 'language_level' not set, using 2 for now (Py2). This will change in a later release! File: /testbed/sklearn/utils/_random.pxd
+      tree = Parsing.p_module(s, pxd, full_module_name)
+    /opt/miniconda3/envs/testbed/lib/python3.6/site-packages/Cython/Compiler/Main.py:369: FutureWarning: Cython directive 'language_level' not set, using 2 for now (Py2). This will change in a later release! File: /testbed/sklearn/utils/arrayfuncs.pyx
+      tree = Parsing.p_module(s, pxd, full_module_name)
+    /opt/miniconda3/envs/testbed/lib/python3.6/site-packages/Cython/Compiler/Main.py:369: FutureWarning: Cython directive 'language_level' not set, using 2 for now (Py2). This will change in a later release! File: /testbed/sklearn/utils/fast_dict.pxd
+      tree = Parsing.p_module(s, pxd, full_module_name)
+    /opt/miniconda3/envs/testbed/lib/python3.6/site-packages/Cython/Compiler/Main.py:369: FutureWarning: Cython directive 'language_level' not set, using 2 for now (Py2). This will change in a later release! File: /testbed/sklearn/utils/graph_shortest_path.pyx
+      tree = Parsing.p_module(s, pxd, full_module_name)
+    /opt/miniconda3/envs/testbed/lib/python3.6/site-packages/Cython/Compiler/Main.py:369: FutureWarning: Cython directive 'language_level' not set, using 2 for now (Py2). This will change in a later release! File: /testbed/sklearn/utils/lgamma.pxd
+      tree = Parsing.p_module(s, pxd, full_module_name)
+    /opt/miniconda3/envs/testbed/lib/python3.6/site-packages/Cython/Compiler/Main.py:369: FutureWarning: Cython directive 'language_level' not set, using 2 for now (Py2). This will change in a later release! File: /testbed/sklearn/utils/murmurhash.pxd
+      tree = Parsing.p_module(s, pxd, full_module_name)
+    /opt/miniconda3/envs/testbed/lib/python3.6/site-packages/Cython/Compiler/Main.py:369: FutureWarning: Cython directive 'language_level' not set, using 2 for now (Py2). This will change in a later release! File: /testbed/sklearn/utils/seq_dataset.pxd
+      tree = Parsing.p_module(s, pxd, full_module_name)
+    /opt/miniconda3/envs/testbed/lib/python3.6/site-packages/Cython/Compiler/Main.py:369: FutureWarning: Cython directive 'language_level' not set, using 2 for now (Py2). This will change in a later release! File: /testbed/sklearn/utils/sparsefuncs_fast.pyx
+      tree = Parsing.p_module(s, pxd, full_module_name)
+    /opt/miniconda3/envs/testbed/lib/python3.6/site-packages/Cython/Compiler/Main.py:369: FutureWarning: Cython directive 'language_level' not set, using 2 for now (Py2). This will change in a later release! File: /testbed/sklearn/utils/weight_vector.pxd
+      tree = Parsing.p_module(s, pxd, full_module_name)
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+Updated 1 path from 980a2ac1ce7
+Checking patch sklearn/linear_model/tests/test_logistic.py...
+Applied patch sklearn/linear_model/tests/test_logistic.py cleanly.
+Updated 1 path from 980a2ac1ce7

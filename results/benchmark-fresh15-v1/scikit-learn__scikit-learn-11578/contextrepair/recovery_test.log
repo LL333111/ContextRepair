@@ -1,0 +1,186 @@
+ContextRepair: omitted slow worktree status diagnostic
+dd69361a0d9 [MRG+2] ENH&BUG Add pos_label parameter and fix a bug in average_precision_score (#9980)
+ContextRepair: omitted slow worktree diff diagnostic
+Using pip 21.2.2 from /opt/miniconda3/envs/testbed/lib/python3.6/site-packages/pip (python 3.6)
+Obtaining file:///testbed
+Requirement already satisfied: numpy>=1.8.2 in /opt/miniconda3/envs/testbed/lib/python3.6/site-packages (from scikit-learn==0.20.dev0) (1.19.2)
+Requirement already satisfied: scipy>=0.13.3 in /opt/miniconda3/envs/testbed/lib/python3.6/site-packages (from scikit-learn==0.20.dev0) (1.5.2)
+Installing collected packages: scikit-learn
+  Attempting uninstall: scikit-learn
+    Found existing installation: scikit-learn 0.20.dev0
+    Uninstalling scikit-learn-0.20.dev0:
+      Removing file or directory /opt/miniconda3/envs/testbed/lib/python3.6/site-packages/scikit-learn.egg-link
+      Removing pth entries from /opt/miniconda3/envs/testbed/lib/python3.6/site-packages/easy-install.pth:
+      Removing entry: /testbed
+      Successfully uninstalled scikit-learn-0.20.dev0
+  Running setup.py develop for scikit-learn
+Successfully installed scikit-learn-0.20.dev0
+============================= test session starts ==============================
+platform linux -- Python 3.6.13, pytest-6.2.4, py-1.11.0, pluggy-0.13.1
+rootdir: /testbed, configfile: setup.cfg
+collected 94 items
+
+sklearn/linear_model/tests/test_logistic.py ............................ [ 29%]
+..................................................................       [100%]
+
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED sklearn/linear_model/tests/test_logistic.py::test_predict_2_classes
+PASSED sklearn/linear_model/tests/test_logistic.py::test_error
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_cv_mock_scorer
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_cv_score_does_not_warn_by_default
+PASSED sklearn/linear_model/tests/test_logistic.py::test_lr_liblinear_warning
+PASSED sklearn/linear_model/tests/test_logistic.py::test_predict_3_classes
+PASSED sklearn/linear_model/tests/test_logistic.py::test_predict_iris
+PASSED sklearn/linear_model/tests/test_logistic.py::test_multinomial_validation[lbfgs]
+PASSED sklearn/linear_model/tests/test_logistic.py::test_multinomial_validation[newton-cg]
+PASSED sklearn/linear_model/tests/test_logistic.py::test_multinomial_validation[sag]
+PASSED sklearn/linear_model/tests/test_logistic.py::test_multinomial_validation[saga]
+PASSED sklearn/linear_model/tests/test_logistic.py::test_check_solver_option[LogisticRegression]
+PASSED sklearn/linear_model/tests/test_logistic.py::test_check_solver_option[LogisticRegressionCV]
+PASSED sklearn/linear_model/tests/test_logistic.py::test_multinomial_binary[lbfgs]
+PASSED sklearn/linear_model/tests/test_logistic.py::test_multinomial_binary[newton-cg]
+PASSED sklearn/linear_model/tests/test_logistic.py::test_multinomial_binary[sag]
+PASSED sklearn/linear_model/tests/test_logistic.py::test_multinomial_binary[saga]
+PASSED sklearn/linear_model/tests/test_logistic.py::test_multinomial_binary_probabilities
+PASSED sklearn/linear_model/tests/test_logistic.py::test_sparsify
+PASSED sklearn/linear_model/tests/test_logistic.py::test_inconsistent_input
+PASSED sklearn/linear_model/tests/test_logistic.py::test_write_parameters
+PASSED sklearn/linear_model/tests/test_logistic.py::test_nan
+PASSED sklearn/linear_model/tests/test_logistic.py::test_consistency_path
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_regression_path_convergence_fail
+PASSED sklearn/linear_model/tests/test_logistic.py::test_liblinear_dual_random_state
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_loss_and_grad
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_grad_hess
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_cv
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_cv_multinomial_score[accuracy-multiclass_agg_list0]
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_cv_multinomial_score[precision-multiclass_agg_list1]
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_cv_multinomial_score[f1-multiclass_agg_list2]
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_cv_multinomial_score[neg_log_loss-multiclass_agg_list3]
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_cv_multinomial_score[recall-multiclass_agg_list4]
+PASSED sklearn/linear_model/tests/test_logistic.py::test_multinomial_logistic_regression_string_inputs
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_cv_sparse
+PASSED sklearn/linear_model/tests/test_logistic.py::test_intercept_logistic_helper
+PASSED sklearn/linear_model/tests/test_logistic.py::test_ovr_multinomial_iris
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_regression_solvers
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_regression_solvers_multiclass
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_regressioncv_class_weights
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_regression_sample_weights
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_regression_class_weights
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logistic_regression_multinomial
+PASSED sklearn/linear_model/tests/test_logistic.py::test_multinomial_grad_hess
+PASSED sklearn/linear_model/tests/test_logistic.py::test_liblinear_decision_function_zero
+PASSED sklearn/linear_model/tests/test_logistic.py::test_liblinear_logregcv_sparse
+PASSED sklearn/linear_model/tests/test_logistic.py::test_saga_sparse
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logreg_intercept_scaling
+PASSED sklearn/linear_model/tests/test_logistic.py::test_logreg_intercept_scaling_zero
+PASSED sklearn/linear_model/tests/test_
+... <4965 chars omitted> ...
+sklearn during the build process.
+    Running command /opt/miniconda3/envs/testbed/bin/python -c 'import io, os, sys, setuptools, tokenize; sys.argv[0] = '"'"'/testbed/setup.py'"'"'; __file__='"'"'/testbed/setup.py'"'"';f = getattr(tokenize, '"'"'open'"'"', open)(__file__) if os.path.exists(__file__) else io.StringIO('"'"'from setuptools import setup; setup()'"'"');code = f.read().replace('"'"'\r\n'"'"', '"'"'\n'"'"');f.close();exec(compile(code, __file__, '"'"'exec'"'"'))' develop --no-deps
+    blas_opt_info:
+    blas_mkl_info:
+    customize UnixCCompiler
+      libraries mkl_rt not found in ['/opt/miniconda3/envs/testbed/lib', '/usr/local/lib', '/usr/lib64', '/usr/lib', '/usr/lib/x86_64-linux-gnu']
+      NOT AVAILABLE
+
+    blis_info:
+      libraries blis not found in ['/opt/miniconda3/envs/testbed/lib', '/usr/local/lib', '/usr/lib64', '/usr/lib', '/usr/lib/x86_64-linux-gnu']
+      NOT AVAILABLE
+
+    openblas_info:
+    C compiler: gcc -pthread -B /opt/miniconda3/envs/testbed/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC
+
+    creating /tmp/tmp_0kzv_84/tmp
+    creating /tmp/tmp_0kzv_84/tmp/tmp_0kzv_84
+    compile options: '-c'
+    gcc: /tmp/tmp_0kzv_84/source.c
+    gcc -pthread -B /opt/miniconda3/envs/testbed/compiler_compat -Wl,--sysroot=/ /tmp/tmp_0kzv_84/tmp/tmp_0kzv_84/source.o -L/opt/miniconda3/envs/testbed/lib -lopenblas -o /tmp/tmp_0kzv_84/a.out
+      FOUND:
+        libraries = ['openblas', 'openblas']
+        library_dirs = ['/opt/miniconda3/envs/testbed/lib']
+        language = c
+        define_macros = [('HAVE_CBLAS', None)]
+
+      FOUND:
+        libraries = ['openblas', 'openblas']
+        library_dirs = ['/opt/miniconda3/envs/testbed/lib']
+        language = c
+        define_macros = [('HAVE_CBLAS', None)]
+
+    running develop
+    running build_scripts
+    running egg_info
+    running build_src
+    build_src
+    building library "libsvm-skl" sources
+    building extension "sklearn.__check_build._check_build" sources
+    building extension "sklearn.cluster._dbscan_inner" sources
+    building extension "sklearn.cluster._optics_inner" sources
+    building extension "sklearn.cluster._hierarchical" sources
+    building extension "sklearn.cluster._k_means_elkan" sources
+    building extension "sklearn.cluster._k_means" sources
+    building extension "sklearn.datasets._svmlight_format" sources
+    building extension "sklearn.decomposition._online_lda" sources
+    building extension "sklearn.decomposition.cdnmf_fast" sources
+    building extension "sklearn.ensemble._gradient_boosting" sources
+    building extension "sklearn.feature_extraction._hashing" sources
+    building extension "sklearn.manifold._utils" sources
+    building extension "sklearn.manifold._barnes_hut_tsne" sources
+    building extension "sklearn.metrics.cluster.expected_mutual_info_fast" sources
+    building extension "sklearn.metrics.pairwise_fast" sources
+    building extension "sklearn.neighbors.ball_tree" sources
+    building extension "sklearn.neighbors.kd_tree" sources
+    building extension "sklearn.neighbors.dist_metrics" sources
+    building extension "sklearn.neighbors.typedefs" sources
+    building extension "sklearn.neighbors.quad_tree" sources
+    building extension "sklearn.tree._tree" sources
+    building extension "sklearn.tree._splitter" sources
+    building extension "sklearn.tree._criterion" sources
+    building extension "sklearn.tree._utils" sources
+    building extension "sklearn.svm.libsvm" sources
+    building extension "sklearn.svm.liblinear" sources
+    building extension "sklearn.svm.libsvm_sparse" sources
+    building extension "sklearn._isotonic" sources
+    building extension "sklearn.linear_model.cd_fast" sources
+    building extension "sklearn.linear_model.sgd_fast" sources
+    building extension "sklearn.linear_model.sag_fast" sources
+    building extension "sklearn.utils.sparsefuncs_fast" sources
+    building extension "sklearn.utils.arrayfuncs" sources
+    building extension "sklearn.utils.murmurhash" sources
+    building extension "sklearn.utils.lgamma" sources
+    building extension "sklearn.utils.graph_shortest_path" sources
+    building extension "sklearn.utils.fast_dict" sources
+    building extension "sklearn.utils.seq_dataset" sources
+    building extension "sklearn.utils.weight_vector" sources
+    building extension "sklearn.utils._random" sources
+    building extension "sklearn.utils._logistic_sigmoid" sources
+    building data_files sources
+    build_src: building npy-pkg config files
+    writing scikit_learn.egg-info/PKG-INFO
+    writing dependency_links to scikit_learn.egg-info/dependency_links.txt
+    writing requirements to scikit_learn.egg-info/requires.txt
+    writing top-level names to scikit_learn.egg-info/top_level.txt
+    reading manifest file 'scikit_learn.egg-info/SOURCES.txt'
+    reading manifest template 'MANIFEST.in'
+    adding license file 'COPYING'
+    adding license file 'AUTHORS.rst'
+    writing manifest file 'scikit_learn.egg-info/SOURCES.txt'
+    running build_ext
+    customize UnixCCompiler
+    customize UnixCCompiler using build_clib
+    customize UnixCCompiler
+    customize UnixCCompiler using build_ext
+    resetting extension 'sklearn.svm.liblinear' language from 'c' to 'c++'.
+    customize UnixCCompiler
+    customize UnixCCompiler using build_ext
+    Creating /opt/miniconda3/envs/testbed/lib/python3.6/site-packages/scikit-learn.egg-link (link to .)
+    Adding scikit-learn 0.20.dev0 to easy-install.pth file
+
+    Installed /testbed
+    Partial import of sklearn during the build process.
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+Updated 1 path from 980a2ac1ce7
+Checking patch sklearn/linear_model/tests/test_logistic.py...
+Applied patch sklearn/linear_model/tests/test_logistic.py cleanly.
+Updated 1 path from 980a2ac1ce7

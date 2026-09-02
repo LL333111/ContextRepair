@@ -1,0 +1,55 @@
+{
+  "instance_id": "sympy__sympy-23413",
+  "issue": "bug with HNF removing rows\nI expect\r\n`np.flip (hermite_normal_form (Matrix (np.flip (np.array ([[5, 8, 12], [0, 0, 1]]))).T).T))`\r\nto give\r\n`[[5,  8, 0], [0,  0, 1]]`\r\nbut instead I get\r\n`[[5,  8, 0]]`\r\nIt seems to be falsely identifying my matrix as rank-deficient and removing the row when I try to achieve a row-style HNF using flips and transposes.\n",
+  "source_repo": "<LOCAL_WORKSPACE>\\prepared_repos\\mirrors\\sympy__sympy.git",
+  "base_commit": "10de1a18a0efac0b19b611e40c928250dda688bf",
+  "test_command": "__CONTEXTREPAIR_OFFICIAL_EVAL__",
+  "condition": "single",
+  "model": {
+    "provider": "openai-compatible",
+    "name": "deepseek-v4-flash",
+    "temperature": 0.0,
+    "max_tokens": 4096,
+    "thinking_enabled": true,
+    "api_key_env": "DEEPSEEK_API_KEY",
+    "base_url": "https://api.deepseek.com",
+    "input_cost_per_million": 0.44,
+    "output_cost_per_million": 1.32
+  },
+  "budget": {
+    "max_total_tokens": 100000,
+    "max_tokens_per_attempt": 100000,
+    "max_model_calls": 40,
+    "max_attempts": 1,
+    "max_wall_seconds": 3600
+  },
+  "recovery": {
+    "enabled": false,
+    "use_execution_evidence": true,
+    "history_aware": true,
+    "max_new_files": 8,
+    "max_new_context_tokens": 12000,
+    "max_anchor_files": 3,
+    "max_anchor_context_tokens": 6000,
+    "max_search_actions": 10
+  },
+  "started_at": "2026-09-02T08:55:13.483935+00:00",
+  "task_metadata": {
+    "benchmark": "SWE-bench/SWE-bench_Verified",
+    "repo": "sympy/sympy",
+    "version": "1.11",
+    "difficulty": "15 min - 1 hour",
+    "docker_image": "swebench/sweb.eval.x86_64.sympy_1776_sympy-23413:latest",
+    "eval_script": "#!/bin/bash\nset -uxo pipefail\nsource /opt/miniconda3/bin/activate\nconda activate testbed\ncd /testbed\ngit config --global --add safe.directory /testbed\ncd /testbed\ngit status\ngit show\ngit -c core.fileMode=false diff 10de1a18a0efac0b19b611e40c928250dda688bf\nsource /opt/miniconda3/bin/activate\nconda activate testbed\npython -m pip install -e .\ngit checkout 10de1a18a0efac0b19b611e40c928250dda688bf sympy/matrices/tests/test_normalforms.py sympy/polys/matrices/tests/test_normalforms.py\ngit apply -v - <<'EOF_114329324912'\ndiff --git a/sympy/matrices/tests/test_normalforms.py b/sympy/matrices/tests/test_normalforms.py\n--- a/sympy/matrices/tests/test_normalforms.py\n+++ b/sympy/matrices/tests/test_normalforms.py\n@@ -77,5 +77,11 @@ def test_hermite_normal():\n     assert hermite_normal_form(m) == hnf\n \n     m = Matrix([[2, 7], [0, 0], [0, 0]])\n-    hnf = Matrix(3, 0, [])\n+    hnf = Matrix([[1], [0], [0]])\n     assert hermite_normal_form(m) == hnf\n+\n+\n+def test_issue_23410():\n+    A = Matrix([[1, 12], [0, 8], [0, 5]])\n+    H = Matrix([[1, 0], [0, 8], [0, 5]])\n+    assert hermite_normal_form(A) == H\ndiff --git a/sympy/polys/matrices/tests/test_normalforms.py b/sympy/polys/matrices/tests/test_normalforms.py\n--- a/sympy/polys/matrices/tests/test_normalforms.py\n+++ b/sympy/polys/matrices/tests/test_normalforms.py\n@@ -62,7 +62,7 @@ def test_hermite_normal():\n     assert hermite_normal_form(m) == hnf\n \n     m = DM([[2, 7], [0, 0], [0, 0]], ZZ)\n-    hnf = DM([[], [], []], ZZ)\n+    hnf = DM([[1], [0], [0]], ZZ)\n     assert hermite_normal_form(m) == hnf\n \n     m = DM([[-2, 1], [0, 1]], ZZ)\n\nEOF_114329324912\n: '>>>>> Start Test Output'\nPYTHONWARNINGS='ignore::UserWarning,ignore::SyntaxWarning' bin/test -C --verbose sympy/matrices/tests/test_normalforms.py sympy/polys/matrices/tests/test_normalforms.py\n: '>>>>> End Test Output'\ngit checkout 10de1a18a0efac0b19b611e40c928250dda688bf sympy/matrices/tests/test_normalforms.py sympy/polys/matrices/tests/test_normalforms.py\n",
+    "eval_timeout_seconds": 1800,
+    "fail_to_pass": [
+      "test_hermite_normal"
+    ],
+    "pass_to_pass": [
+      "test_smith_normal",
+      "test_smith_normal_deprecated"
+    ],
+    "log_parser": "parse_log_sympy",
+    "eval_type": "pass_and_fail"
+  }
+}

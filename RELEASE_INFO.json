@@ -1,0 +1,17 @@
+{
+  "release": "fresh15-2026-09-02",
+  "scope": "completed pilot and fresh-15 benchmark only",
+  "dataset": "SWE-bench/SWE-bench_Verified",
+  "fresh15_subset_sha256": "808a76c2069da69a57e858ad372e9b15ad5d184eec4910cd8f0d507008160d42",
+  "fresh15_tasks": 15,
+  "fresh15_completed_runs": 45,
+  "fresh15_partial_results": 0,
+  "single_resolved": 5,
+  "retry_resolved": 9,
+  "contextrepair_resolved": 8,
+  "completed_run_tokens": 5545001,
+  "completed_run_cost_usd": 2.81307356,
+  "charged_milestone_cost_usd": 2.84047852,
+  "primary_conclusion": "ContextRepair did not outperform independent retry under the tested model and budget.",
+  "ongoing_heldout_included": false
+}

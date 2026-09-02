@@ -1,0 +1,42 @@
+diff --git a/django/db/backends/base/schema.py b/django/db/backends/base/schema.py
+index f2ca8c8df9..61d707c5c3 100644
+--- a/django/db/backends/base/schema.py
++++ b/django/db/backends/base/schema.py
+@@ -568,7 +568,7 @@ class BaseDatabaseSchemaEditor:
+             exclude=meta_constraint_names | meta_index_names,
+             **constraint_kwargs,
+         )
+-        if len(constraint_names) != 1:
++        if len(constraint_names) == 0:
+             raise ValueError(
+                 "Found wrong number (%s) of constraints for %s(%s)"
+                 % (
+@@ -577,6 +577,28 @@ class BaseDatabaseSchemaEditor:
+                     ", ".join(columns),
+                 )
+             )
++        if len(constraint_names) > 1:
++            # If multiple constraints match, prefer one that is not a primary
++            # key. This allows removing a unique_together on a primary key
++            # column that also has its own unique=True constraint.
++            non_pk = [
++                name
++                for name in constraint_names
++                if not self._constraint_names(
++                    model, columns, primary_key=True, exclude={name}
++                )
++            ]
++            if len(non_pk) == 1:
++                constraint_names = non_pk
++            else:
++                raise ValueError(
++                    "Found wrong number (%s) of constraints for %s(%s)"
++                    % (
++                        len(constraint_names),
++                        model._meta.db_table,
++                        ", ".join(columns),
++                    )
++                )
+         self.execute(self._delete_constraint_sql(sql, model, constraint_names[0]))
+ 
+     def alter_db_table(self, model, old_db_table, new_db_table):

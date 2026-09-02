@@ -1,0 +1,47 @@
+diff --git a/django/template/defaultfilters.py b/django/template/defaultfilters.py
+index 5289ef34a0..3f3fa32217 100644
+--- a/django/template/defaultfilters.py
++++ b/django/template/defaultfilters.py
+@@ -498,6 +498,17 @@ def safeseq(value):
+     return [mark_safe(obj) for obj in value]
+ 
+ 
++@register.filter(is_safe=True)
++def escapeseq(value):
++    """
++    Escape each element in a sequence. Return a list with the results.
++
++    This is useful when autoescaping is turned off and you need to escape
++    each element of a sequence before joining them.
++    """
++    return [conditional_escape(obj) for obj in value]
++
++
+ @register.filter(is_safe=True)
+ @stringfilter
+ def striptags(value):
+diff --git a/tests/template_tests/filter_tests/test_escapeseq.py b/tests/template_tests/filter_tests/test_escapeseq.py
+new file mode 100644
+index 0000000000..fbaa636bf8
+--- /dev/null
++++ b/tests/template_tests/filter_tests/test_escapeseq.py
+@@ -0,0 +1,19 @@
++from django.test import SimpleTestCase
++
++from ..utils import setup
++
++
++class EscapeseqTests(SimpleTestCase):
++    @setup(
++        {
++            "escapeseq01": (
++                '{% autoescape off %}{{ a|join:", " }} -- '
++                '{{ a|escapeseq|join:", " }}{% endautoescape %}'
++            )
++        }
++    )
++    def test_escapeseq01(self):
++        output = self.engine.render_to_string(
++            "escapeseq01", {"a": ["&", "<"]}
++        )
++        self.assertEqual(output, "&, < -- &amp;, &lt;")

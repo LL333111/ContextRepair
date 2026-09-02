@@ -1,0 +1,25 @@
+{
+  "benchmark": "SWE-bench/SWE-bench_Verified",
+  "locked": true,
+  "seed": 31,
+  "size": 15,
+  "instance_ids": [
+    "astropy__astropy-13977",
+    "django__django-10097",
+    "django__django-11740",
+    "django__django-12143",
+    "django__django-12155",
+    "django__django-12262",
+    "django__django-13568",
+    "django__django-15732",
+    "django__django-16877",
+    "matplotlib__matplotlib-25311",
+    "scikit-learn__scikit-learn-11578",
+    "scikit-learn__scikit-learn-14496",
+    "sphinx-doc__sphinx-7454",
+    "sphinx-doc__sphinx-7889",
+    "sympy__sympy-23413"
+  ],
+  "sha256": "808a76c2069da69a57e858ad372e9b15ad5d184eec4910cd8f0d507008160d42",
+  "locked_at": "2026-09-02T05:54:32.280969+00:00"
+}

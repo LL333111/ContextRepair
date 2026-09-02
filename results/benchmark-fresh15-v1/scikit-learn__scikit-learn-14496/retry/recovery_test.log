@@ -1,0 +1,120 @@
+ContextRepair: omitted slow worktree status diagnostic
+d49a6f13af2 DOC what's new clean up for 0.21.3
+ContextRepair: omitted slow worktree diff diagnostic
+Using pip 21.2.2 from /opt/miniconda3/envs/testbed/lib/python3.6/site-packages/pip (python 3.6)
+Obtaining file:///testbed
+Requirement already satisfied: numpy>=1.11.0 in /opt/miniconda3/envs/testbed/lib/python3.6/site-packages (from scikit-learn==0.22.dev0) (1.19.2)
+Requirement already satisfied: scipy>=0.17.0 in /opt/miniconda3/envs/testbed/lib/python3.6/site-packages (from scikit-learn==0.22.dev0) (1.5.2)
+Requirement already satisfied: joblib>=0.11 in /opt/miniconda3/envs/testbed/lib/python3.6/site-packages (from scikit-learn==0.22.dev0) (1.1.1)
+Installing collected packages: scikit-learn
+  Running setup.py develop for scikit-learn
+============================= test session starts ==============================
+platform linux -- Python 3.6.13, pytest-6.2.4, py-1.11.0, pluggy-0.13.1
+rootdir: /testbed, configfile: setup.cfg
+collected 40 items
+
+sklearn/cluster/tests/test_optics.py ................................... [ 87%]
+.....                                                                    [100%]
+
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED sklearn/cluster/tests/test_optics.py::test_extend_downward[r_plot0-3]
+PASSED sklearn/cluster/tests/test_optics.py::test_extend_downward[r_plot1-0]
+PASSED sklearn/cluster/tests/test_optics.py::test_extend_downward[r_plot2-4]
+PASSED sklearn/cluster/tests/test_optics.py::test_extend_downward[r_plot3-4]
+PASSED sklearn/cluster/tests/test_optics.py::test_extend_upward[r_plot0-6]
+PASSED sklearn/cluster/tests/test_optics.py::test_extend_upward[r_plot1-0]
+PASSED sklearn/cluster/tests/test_optics.py::test_extend_upward[r_plot2-0]
+PASSED sklearn/cluster/tests/test_optics.py::test_extend_upward[r_plot3-2]
+PASSED sklearn/cluster/tests/test_optics.py::test_the_extract_xi_labels[ordering0-clusters0-expected0]
+PASSED sklearn/cluster/tests/test_optics.py::test_the_extract_xi_labels[ordering1-clusters1-expected1]
+PASSED sklearn/cluster/tests/test_optics.py::test_the_extract_xi_labels[ordering2-clusters2-expected2]
+PASSED sklearn/cluster/tests/test_optics.py::test_the_extract_xi_labels[ordering3-clusters3-expected3]
+PASSED sklearn/cluster/tests/test_optics.py::test_extract_xi
+PASSED sklearn/cluster/tests/test_optics.py::test_cluster_hierarchy_
+PASSED sklearn/cluster/tests/test_optics.py::test_correct_number_of_clusters
+PASSED sklearn/cluster/tests/test_optics.py::test_minimum_number_of_sample_check
+PASSED sklearn/cluster/tests/test_optics.py::test_bad_extract
+PASSED sklearn/cluster/tests/test_optics.py::test_bad_reachability
+PASSED sklearn/cluster/tests/test_optics.py::test_close_extract
+PASSED sklearn/cluster/tests/test_optics.py::test_dbscan_optics_parity[3-0.1]
+PASSED sklearn/cluster/tests/test_optics.py::test_dbscan_optics_parity[3-0.3]
+PASSED sklearn/cluster/tests/test_optics.py::test_dbscan_optics_parity[3-0.5]
+PASSED sklearn/cluster/tests/test_optics.py::test_dbscan_optics_parity[10-0.1]
+PASSED sklearn/cluster/tests/test_optics.py::test_dbscan_optics_parity[10-0.3]
+PASSED sklearn/cluster/tests/test_optics.py::test_dbscan_optics_parity[10-0.5]
+PASSED sklearn/cluster/tests/test_optics.py::test_dbscan_optics_parity[20-0.1]
+PASSED sklearn/cluster/tests/test_optics.py::test_dbscan_optics_parity[20-0.3]
+PASSED sklearn/cluster/tests/test_optics.py::test_dbscan_optics_parity[20-0.5]
+PASSED sklearn/cluster/tests/test_optics.py::test_min_samples_edge_case
+PASSED sklearn/cluster/tests/test_optics.py::test_min_cluster_size[2]
+PASSED sklearn/cluster/tests/test_optics.py::test_min_cluster_size_invalid[0]
+PASSED sklearn/cluster/tests/test_optics.py::test_min_cluster_size_invalid[-1]
+PASSED sklearn/cluster/tests/test_optics.py::test_min_cluster_size_invalid[1.1]
+PASSED sklearn/cluster/tests/test_optics.py::test_min_cluster_size_invalid[2.2]
+PASSED sklearn/cluster/tests/test_optics.py::test_min_cluster_size_invalid2
+PASSED sklearn/cluster/tests/test_optics.py::test_processing_order
+PASSED sklearn/cluster/tests/test_optics.py::test_compare_to_ELKI
+PASSED sklearn/cluster/tests/test_optics.py::test_wrong_cluster_method
+PASSED sklearn/cluster/tests/test_optics.py::test_extract_dbscan
+PASSED sklearn/cluster/tests/test_optics.py::test_precomputed_dists
+======================== 40 passed, 1 warning in 6.48s =========================
+>>>>> Test Exit Code: 0
+
+    Running command python setup.py egg_info
+    running egg_info
+    creating /tmp/pip-pip-egg-info-qsw0u6vu/scikit_learn.egg-info
+    writing /tmp/pip-pip-egg-info-qsw0u6vu/scikit_learn.egg-info/PKG-INFO
+    writing dependency_links to /tmp/pip-pip-egg-info-qsw0u6vu/scikit_learn.egg-info/dependency_links.txt
+    writing requirements to /tmp/pip-pip-egg-info-qsw0u6vu/scikit_learn.egg-info/requires.txt
+    writing top-level names to /tmp/pip-pip-egg-info-qsw0u6vu/scikit_learn.egg-info/top_level.txt
+    writing manifest file '/tmp/pip-pip-egg-info-qsw0u6vu/scikit_learn.egg-info/SOURCES.txt'
+    reading manifest file '/tmp/pip-pip-egg-info-qsw0u6vu/scikit_learn.egg-info/SOURCES.txt'
+    reading manifest template 'MANIFEST.in'
+    adding license file 'COPYING'
+    writing manifest file '/tmp/pip-pip-egg-info-qsw0u6vu/scikit_learn.egg-info/SOURCES.txt'
+    Partial import of sklearn during the build process.
+    Running command /opt/miniconda3/envs/testbed/bin/python -c 'import io, os, sys, setuptools, tokenize; sys.argv[0] = '"'"'/testbed/setup.py'"'"'; __file__='"'"'/testbed/setup.py'"'"';f = getattr(tokenize, '"'"'open'"'"', open)(__file__) if os.path.exists(__file__) else io.StringIO('"'"'from setuptools import setup; setup()'"'"');code = f.read().replace('"'"'\r\n'"'"', '"'"'\n'"'"');f.close();exec(compile(code, __file__, '"'"'exec'"'"'))' develop --no-deps
+    C compiler: gcc -pthread -B /opt/miniconda3/envs/testbed/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC
+
+    compile options: '-c'
+    extra options: '-fopenmp'
+    gcc: test_openmp.c
+    gcc -pthread -B /opt/miniconda3/envs/testbed/compiler_compat -Wl,--sysroot=/ objects/test_openmp.o -o test_openmp -fopenmp
+    Partial import of sklearn during the build process.
+    Traceback (most recent call last):
+      File "<string>", line 1, in <module>
+      File "/testbed/setup.py", line 290, in <module>
+        setup_package()
+      File "/testbed/setup.py", line 286, in setup_package
+        setup(**metadata)
+      File "/opt/miniconda3/envs/testbed/lib/python3.6/site-packages/numpy/distutils/core.py", line 135, in setup
+        config = configuration()
+      File "/testbed/setup.py", line 174, in configuration
+        config.add_subpackage('sklearn')
+      File "/opt/miniconda3/envs/testbed/lib/python3.6/site-packages/numpy/distutils/misc_util.py", line 1020, in add_subpackage
+        caller_level = 2)
+      File "/opt/miniconda3/envs/testbed/lib/python3.6/site-packages/numpy/distutils/misc_util.py", line 989, in get_subpackage
+        caller_level = caller_level + 1)
+      File "/opt/miniconda3/envs/testbed/lib/python3.6/site-packages/numpy/distutils/misc_util.py", line 926, in _get_configuration_from_setup_py
+        config = setup_module.configuration(*args)
+      File "sklearn/setup.py", line 76, in configuration
+        maybe_cythonize_extensions(top_path, config)
+      File "/testbed/sklearn/_build_utils/__init__.py", line 43, in maybe_cythonize_extensions
+        with_openmp = check_openmp_support()
+      File "/testbed/sklearn/_build_utils/openmp_helpers.py", line 100, in check_openmp_support
+        output = subprocess.check_output('./test_openmp')
+      File "/opt/miniconda3/envs/testbed/lib/python3.6/subprocess.py", line 356, in check_output
+        **kwargs).stdout
+      File "/opt/miniconda3/envs/testbed/lib/python3.6/subprocess.py", line 423, in run
+        with Popen(*popenargs, **kwargs) as process:
+      File "/opt/miniconda3/envs/testbed/lib/python3.6/subprocess.py", line 729, in __init__
+        restore_signals, start_new_session)
+      File "/opt/miniconda3/envs/testbed/lib/python3.6/subprocess.py", line 1364, in _execute_child
+        raise child_exception_type(errno_num, err_msg, err_filename)
+    PermissionError: [Errno 13] Permission denied: './test_openmp'
+ERROR: Command errored out with exit status 1: /opt/miniconda3/envs/testbed/bin/python -c 'import io, os, sys, setuptools, tokenize; sys.argv[0] = '"'"'/testbed/setup.py'"'"'; __file__='"'"'/testbed/setup.py'"'"';f = getattr(tokenize, '"'"'open'"'"', open)(__file__) if os.path.exists(__file__) else io.StringIO('"'"'from setuptools import setup; setup()'"'"');code = f.read().replace('"'"'\r\n'"'"', '"'"'\n'"'"');f.close();exec(compile(code, __file__, '"'"'exec'"'"'))' develop --no-deps Check the logs for full command output.
+Updated 1 path from a03b3bd563d
+Checking patch sklearn/cluster/tests/test_optics.py...
+Applied patch sklearn/cluster/tests/test_optics.py cleanly.
+Updated 1 path from a03b3bd563d

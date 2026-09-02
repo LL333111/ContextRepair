@@ -1,0 +1,19 @@
+{
+  "instance_id": "scikit-learn__scikit-learn-14496",
+  "condition": "single",
+  "resolved": false,
+  "initial_resolved": false,
+  "recovery_attempted": false,
+  "recovered": false,
+  "final_attempt": "initial",
+  "recovery_error": null,
+  "model_calls": 13,
+  "input_tokens": 94729,
+  "output_tokens": 5477,
+  "total_tokens": 100206,
+  "cost_usd": 0.0489104,
+  "wall_seconds": 300.98399999999674,
+  "usage_estimated": false,
+  "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "finished_at": "2026-09-02T08:45:36.899456+00:00"
+}

@@ -1,0 +1,19 @@
+{
+  "instance_id": "sphinx-doc__sphinx-7590",
+  "condition": "retry",
+  "resolved": false,
+  "initial_resolved": false,
+  "recovery_attempted": true,
+  "recovered": false,
+  "final_attempt": "recovery",
+  "recovery_error": null,
+  "model_calls": 28,
+  "input_tokens": 175340,
+  "output_tokens": 11442,
+  "total_tokens": 186782,
+  "cost_usd": 0.09225304,
+  "wall_seconds": 404.375,
+  "usage_estimated": false,
+  "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "finished_at": "2026-09-02T05:15:47.115004+00:00"
+}

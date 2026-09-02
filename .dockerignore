@@ -1,0 +1,15 @@
+.git
+.venv
+.venv-swebench
+__pycache__
+*.py[cod]
+.pytest_cache
+.ruff_cache
+.coverage
+htmlcov
+.env
+results
+predictions
+.cache
+prepared_repos
+prepared_tasks*.jsonl

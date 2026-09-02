@@ -1,0 +1,7 @@
+{
+  "benchmark": "princeton-nlp/SWE-bench_Verified",
+  "locked": false,
+  "instance_ids": [],
+  "note": "Intentionally empty: lock 50-100 held-out IDs before final experiments and never edit afterward."
+}
+

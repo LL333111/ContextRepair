@@ -1,0 +1,16 @@
+{
+  "benchmark": "SWE-bench/SWE-bench_Verified",
+  "locked": true,
+  "seed": 31,
+  "size": 6,
+  "instance_ids": [
+    "django__django-12143",
+    "django__django-12155",
+    "django__django-12262",
+    "django__django-13568",
+    "django__django-15732",
+    "django__django-16877"
+  ],
+  "sha256": "39f267928fc823e03dd13d01be46bad03cb5446b4be3327b3acf232559cc623c",
+  "locked_at": "2026-09-02T10:19:06.206Z"
+}

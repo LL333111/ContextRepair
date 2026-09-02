@@ -1,0 +1,113 @@
+{
+  "failure_summary": "The attempted patch to django/template/library.py introduced an IndentationError at line 276, causing the test suite to fail during import. The patch was applied incorrectly, leaving the code block misaligned.",
+  "failure_type": "incomplete_fix",
+  "contradicted_assumptions": [
+    "The patch assumed that the replacement text matched exactly once, but the initial replace failed, indicating the code structure was not as expected.",
+    "The patch assumed that the modified code would be syntactically correct, but it introduced an indentation error."
+  ],
+  "missing_context_hypotheses": [
+    "The exact indentation and structure of the surrounding code in parse_bits may not have been fully captured, leading to an incorrect patch application.",
+    "The patch may have been applied without properly accounting for the existing indentation level of the block, causing the misalignment.",
+    "The test environment may have had additional modifications or patches applied that affected the file state."
+  ],
+  "candidate_files": [
+    "django/template/library.py",
+    "tests/runtests.py",
+    "django/test/__init__.py",
+    "django/test/client.py",
+    "django/core/handlers/base.py",
+    "django/urls/__init__.py",
+    "django/urls/base.py",
+    "django/urls/exceptions.py",
+    "django/http/__init__.py",
+    "django/http/response.py",
+    "django/core/serializers/__init__.py",
+    "django/core/serializers/base.py",
+    "django/db/models/__init__.py",
+    "django/db/models/aggregates.py",
+    "django/db/models/expressions.py",
+    "django/db/models/fields/__init__.py",
+    "django/forms/__init__.py",
+    "django/forms/boundfield.py",
+    "django/forms/widgets.py",
+    "django/templatetags/static.py",
+    "django/template/__init__.py",
+    "django/template/engine.py"
+  ],
+  "candidate_symbols": [
+    "parse_bits"
+  ],
+  "search_actions": [
+    {
+      "action": "read",
+      "path": "django/template/library.py",
+      "start_line": 230,
+      "end_line": 280,
+      "reason": "Inspect the current state of parse_bits and surrounding code to understand the indentation error and the logic for handling keyword-only arguments."
+    },
+    {
+      "action": "read",
+      "path": "django/template/library.py",
+      "start_line": 100,
+      "end_line": 160,
+      "reason": "Review the simple_tag and inclusion_tag decorators to see how they call parse_bits and what parameters they pass, especially regarding keyword-only arguments."
+    },
+    {
+      "action": "read",
+      "path": "tests/template_tests/test_library.py",
+      "start_line": 1,
+      "end_line": 130,
+      "reason": "Examine existing tests for simple_tag and inclusion_tag to understand expected behavior and identify test cases that might cover keyword-only arguments."
+    },
+    {
+      "action": "read",
+      "path": "tests/template_tests/templatetags/custom.py",
+      "start_line": 1,
+      "end_line": 200,
+      "reason": "Review custom template tag definitions to see if any use keyword-only arguments and how they are registered."
+    },
+    {
+      "action": "search",
+      "query": "keyword-only",
+      "path": "tests/template_tests",
+      "reason": "Find any existing tests or references to keyword-only arguments in template tag tests."
+    },
+    {
+      "action": "search",
+      "query": "parse_bits",
+      "path": "django",
+      "reason": "Locate all callers of parse_bits to understand the full contract and potential impact of changes."
+    },
+    {
+      "action": "read",
+      "path": "django/template/library.py",
+      "start_line": 1,
+      "end_line": 100,
+      "reason": "Review the top of library.py for imports and helper functions that might be relevant to the patch."
+    },
+    {
+      "action": "read",
+      "path": "django/template/library.py",
+      "start_line": 280,
+      "end_line": 330,
+      "reason": "Inspect the code after the indentation error to see the rest of parse_bits and how errors are raised."
+    },
+    {
+      "action": "search",
+      "query": "received multiple values for keyword argument",
+      "path": "django",
+      "reason": "Find where similar error messages are generated to understand the expected error handling pattern."
+    },
+    {
+      "action": "read",
+      "path": "django/contrib/admin/templatetags/base.py",
+      "start_line": 1,
+      "end_line": 40,
+      "reason": "Review how admin tags use parse_bits and handle keyword-only arguments, as this is another caller."
+    }
+  ],
+  "priority": [
+    "high"
+  ],
+  "rationale": "The failure is directly caused by a syntax error introduced by the patch, which prevents the entire test suite from running. The fix is incomplete because it does not address the root cause of the issue (handling keyword-only arguments) and instead introduces a new error. The priority is high because the code is broken and needs immediate correction."
+}
