@@ -1,0 +1,19 @@
+{
+  "instance_id": "astropy__astropy-14539",
+  "condition": "retry",
+  "resolved": true,
+  "initial_resolved": true,
+  "recovery_attempted": false,
+  "recovered": false,
+  "final_attempt": "initial",
+  "recovery_error": null,
+  "model_calls": 15,
+  "input_tokens": 90347,
+  "output_tokens": 5293,
+  "total_tokens": 95640,
+  "cost_usd": 0.04673944,
+  "wall_seconds": 190.48500000004424,
+  "usage_estimated": false,
+  "patch_sha256": "44da6c4e62e9e5b7d5ccd3f0d73bb3f025c69f7e083196c1260e2d5b4100829d",
+  "finished_at": "2026-09-02T11:16:54.744813+00:00"
+}

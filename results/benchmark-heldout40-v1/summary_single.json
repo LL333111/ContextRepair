@@ -1,0 +1,14 @@
+{
+  "tasks": 40,
+  "resolved": 22,
+  "resolved_pct": 55.0,
+  "initial_failures": 18,
+  "recovered": 0,
+  "recovery_pct": 0.0,
+  "avg_input_tokens": 83412.025,
+  "avg_output_tokens": 8563.15,
+  "avg_total_tokens": 91975.175,
+  "avg_cost_usd": 0.048004648999999996,
+  "cost_per_resolved_usd": 0.08728118,
+  "avg_wall_seconds": 337.8952500000014
+}

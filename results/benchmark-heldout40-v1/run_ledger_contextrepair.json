@@ -1,0 +1,12 @@
+{
+  "status": "complete",
+  "current_task": null,
+  "error": null,
+  "completed_task_conditions": 40,
+  "completed_cost_usd": 2.720330800000001,
+  "interrupted_cost_usd": 0.0,
+  "consumed_cost_usd": 2.720330800000001,
+  "max_total_cost_usd": 3.5,
+  "remaining_cost_usd": 0.779669199999999,
+  "updated_at": "2026-09-02T19:36:31.199696+00:00"
+}

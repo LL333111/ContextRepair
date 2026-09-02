@@ -1,0 +1,19 @@
+{
+  "instance_id": "matplotlib__matplotlib-24970",
+  "condition": "contextrepair",
+  "resolved": false,
+  "initial_resolved": false,
+  "recovery_attempted": true,
+  "recovered": false,
+  "final_attempt": "recovery",
+  "recovery_error": null,
+  "model_calls": 18,
+  "input_tokens": 177139,
+  "output_tokens": 14980,
+  "total_tokens": 192119,
+  "cost_usd": 0.09771476000000001,
+  "wall_seconds": 436.51600000000326,
+  "usage_estimated": false,
+  "patch_sha256": "0373815906cbea92cccc215f1ce8bcf87b991ad6228625d6372d3dae994a76ae",
+  "finished_at": "2026-09-02T18:24:14.148386+00:00"
+}

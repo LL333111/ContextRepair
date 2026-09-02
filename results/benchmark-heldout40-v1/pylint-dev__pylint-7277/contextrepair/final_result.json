@@ -1,0 +1,19 @@
+{
+  "instance_id": "pylint-dev__pylint-7277",
+  "condition": "contextrepair",
+  "resolved": false,
+  "initial_resolved": false,
+  "recovery_attempted": true,
+  "recovered": false,
+  "final_attempt": "recovery",
+  "recovery_error": null,
+  "model_calls": 22,
+  "input_tokens": 146637,
+  "output_tokens": 20022,
+  "total_tokens": 166659,
+  "cost_usd": 0.09094932000000001,
+  "wall_seconds": 860.0310000000172,
+  "usage_estimated": false,
+  "patch_sha256": "0904d5a7ae68fbf8326ca9336052e8490fa410f342e4a9b4c107027eca9aa7fc",
+  "finished_at": "2026-09-02T19:09:33.934235+00:00"
+}

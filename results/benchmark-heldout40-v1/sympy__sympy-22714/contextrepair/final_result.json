@@ -1,0 +1,19 @@
+{
+  "instance_id": "sympy__sympy-22714",
+  "condition": "contextrepair",
+  "resolved": true,
+  "initial_resolved": true,
+  "recovery_attempted": false,
+  "recovered": false,
+  "final_attempt": "initial",
+  "recovery_error": null,
+  "model_calls": 14,
+  "input_tokens": 78446,
+  "output_tokens": 9961,
+  "total_tokens": 88407,
+  "cost_usd": 0.04766476,
+  "wall_seconds": 224.40600000001723,
+  "usage_estimated": false,
+  "patch_sha256": "559b39fa27f4db1ed2afcb3ddeea64107298e0bd5271ad22c85cfe34efb1e7a9",
+  "finished_at": "2026-09-02T19:36:29.194092+00:00"
+}

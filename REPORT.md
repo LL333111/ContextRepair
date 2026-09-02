@@ -2,23 +2,41 @@
 
 ## Status
 
-A fresh locked 15-task comparison completed on 2026-09-02 after the five-task pipeline pilot.
-It contains 45 complete task-condition runs with no partial result files. The result is a
-pilot-scale matched-task benchmark, but remains too small for a broad performance claim.
+A locked 40-task held-out comparison completed on 2026-09-02 after the five-task pilot and
+fresh-15 milestone. It contains 120 complete task-condition runs with no partial results in the
+combined root. This is a substantial engineering-portfolio benchmark, but not a broad model or
+publication-scale claim.
 
 - Benchmark: `SWE-bench/SWE-bench_Verified`
-- Subset size and seed: 15 tasks, seed 31; all five pilot tasks excluded
-- Subset checksum: `808a76c2069da69a57e858ad372e9b15ad5d184eec4910cd8f0d507008160d42`
+- Subset size and seed: 40 tasks, seed 47; all pilot and fresh-15 tasks excluded
+- Subset checksum: `1efc1c75bcdf286a9fcd579d05fc8375abfbf34952cccfbfa0325a960516f626`
 - Model: `deepseek-v4-flash`, temperature 0, thinking enabled
 - Conditions: single, independent retry, ContextRepair
 - Pricing used for the conservative estimate: $0.44/M input tokens and $1.32/M output tokens
-- Raw combined artifacts: `results/benchmark-fresh15-v1/`
-- Aggregate analysis: `results/benchmark-fresh15-v1/analysis.json`
+- Raw combined artifacts: `results/benchmark-heldout40-v1/`
+- Aggregate analysis: `results/benchmark-heldout40-v1/analysis.json`
+- Paired statistics: `results/benchmark-heldout40-v1/statistics.json`
 
-Conditions and the final ContextRepair shards ran concurrently in isolated result roots to
-reduce elapsed time. They used separate workspaces and containers with unchanged task prompts,
-budgets, model settings, and evaluator commands. Artifacts were copied into the combined root
-after completion. Scheduling therefore must not be used for a cross-condition throughput claim.
+Single and Retry ran concurrently in isolated result roots; ContextRepair ran afterward under
+the same frozen task and inference contract. All conditions used separate workspaces and
+containers with unchanged prompts, budgets, model settings, and evaluator commands. Artifacts
+were copied into the combined root after completion. Scheduling is not used for a throughput
+claim.
+
+## Execution integrity disclosures
+
+Two general runner fixes were made after held-out execution began. Neither changed the model,
+agent logic, prompts, task set, token budgets, or official 30-minute evaluation rule:
+
+1. The fifth task on the Single and Retry lines encountered 334 rebuildable third-party
+   `.eggs` cache artifacts before any model call. The artifact-seeding filter was extended to
+   omit `.eggs`, then both lines resumed.
+2. Retry task 26 issued a broad host-side `rg` query that exceeded 60 seconds. The shell tool
+   was changed to return an actionable timeout result so the agent could narrow the query. The
+   interrupted partial call cost $0.00988152 and is included in charged cost.
+
+A zero-cost launcher permission failure also occurred before the first ContextRepair model call;
+the frozen command was relaunched with host Docker access. It produced no model call or result.
 
 ## Research questions
 
@@ -37,62 +55,49 @@ after completion. Scheduling therefore must not be used for a cross-condition th
 - Required ablation: remove execution evidence.
 - Matching variables: model/version, temperature, task IDs, environment images, evaluator, max attempts, and total inference-token ceiling.
 
-Record the final subset checksum, dataset revisions, model version, prices, container images, source commit, and start date here before launching the final run.
+The final subset checksum, model settings, prices, task metadata, container images, and run
+timestamps are retained in the locked subset and per-task artifacts.
 
 ## Main results
 
-| Method | Resolved | Recovery | Avg input tokens | Avg output tokens | Cost / task |
-|---|---:|---:|---:|---:|---:|
-| SINGLE | 5/15 (33.3%) | — | 81,627 | 8,156 | $0.0467 |
-| RETRY | 9/15 (60.0%) | 2/8 (25.0%) | 122,452 | 9,982 | $0.0671 |
-| CONTEXTREPAIR | 8/15 (53.3%) | 2/9 (22.2%) | 137,310 | 10,140 | $0.0738 |
+| Method | Resolved | Recovery | Avg input tokens | Avg output tokens | Cost / task | Wilson 95% CI |
+|---|---:|---:|---:|---:|---:|---:|
+| SINGLE | 22/40 (55.0%) | — | 83,412 | 8,563 | $0.0480 | 39.8–69.3% |
+| RETRY | 21/40 (52.5%) | 3/22 (13.6%) | 124,484 | 8,980 | $0.0666 | 37.5–67.1% |
+| CONTEXTREPAIR | 22/40 (55.0%) | 1/19 (5.3%) | 126,256 | 9,436 | $0.0680 | 39.8–69.3% |
 
-| Instance | SINGLE | RETRY | CONTEXTREPAIR |
-|---|---:|---:|---:|
-| `astropy__astropy-13977` | Fail | Fail | Fail |
-| `django__django-10097` | Fail | Fail | Fail |
-| `django__django-11740` | Fail | Pass | Fail |
-| `django__django-12143` | Pass | Fail | Pass |
-| `django__django-12155` | Pass | Pass | Pass |
-| `django__django-12262` | Pass | Pass | Pass |
-| `django__django-13568` | Fail | Pass | Pass |
-| `django__django-15732` | Fail | Fail | Fail |
-| `django__django-16877` | Pass | Pass | Pass |
-| `matplotlib__matplotlib-25311` | Fail | Fail | Fail |
-| `scikit-learn__scikit-learn-11578` | Fail | Pass | Pass |
-| `scikit-learn__scikit-learn-14496` | Fail | Pass | Pass |
-| `sphinx-doc__sphinx-7454` | Fail | Pass | Fail |
-| `sphinx-doc__sphinx-7889` | Pass | Pass | Pass |
-| `sympy__sympy-23413` | Fail | Fail | Fail |
+The 120 completed runs used 14,445,242 tokens and $7.3056. One interrupted Retry call added
+$0.0099, making total charged held-out cost $7.3154. ContextRepair used 1.7% more tokens and
+2.1% more completed-run cost per task than Retry.
 
-The 45 completed runs used 5,120,827 input tokens and 424,174 output tokens, for 5,545,001
-total tokens and $2.8131. One interrupted ContextRepair call used while splitting the remaining
-work added $0.0274, making total charged experiment cost $2.8405. ContextRepair recovered two
-initial failures, but independent retry resolved one more task overall. ContextRepair consumed
-11.3% more tokens and 10.1% more cost per task than Retry.
+The primary paired Retry-versus-ContextRepair table contains two ContextRepair-only successes,
+one Retry-only success, 20 joint successes, and 17 joint failures. The observed difference is
++2.5 percentage points; the two-sided exact McNemar test gives p=1.0. ContextRepair and Single
+both resolved 22 tasks, with one discordant success in each direction. These results do not
+support a resolution-uplift or mechanism-improvement claim.
 
-The paired Retry-versus-ContextRepair table contains one ContextRepair-only success, two
-Retry-only successes, seven joint successes, and five joint failures. The paired difference is
--6.7 percentage points; the two-sided exact McNemar test gives p=1.0. Wilson 95% intervals for
-the unpaired descriptive rates are approximately 15.2–58.3% (Single), 35.7–80.2% (Retry), and
-30.1–75.2% (ContextRepair). These wide intervals prohibit a general improvement claim.
-
-## Mechanism observations
+## Mechanism results
 
 | Metric | Initial | After re-exploration | Difference |
 |---|---:|---:|---:|
+| Relevant-file recall | PENDING | PENDING | PENDING |
+| Relevant-line coverage | PENDING | PENDING | PENDING |
+| Relevant context / 1K tokens | PENDING | PENDING | PENDING |
 
-The fresh run generated nine recovery analyses: three `incomplete_fix`, three
-`incorrect_causal_hypothesis`, two `missing_cross_file_dependency`, and one
-`environment_test_failure`. Two cases recovered. Recovered cases admitted 3.5 new files on
-average versus 3.29 for non-recovered cases. This is descriptive, not relevant-file recall;
-ground-truth SWE-Explore annotations are still required for the preregistered mechanism metrics.
-Ground-truth localization metrics and execution-evidence ablations remain future work because this benchmark did not include a pinned SWE-Explore annotation release.
+The held-out run generated 19 recovery analyses: five `incorrect_causal_hypothesis`, four
+`incomplete_fix`, four `environment_test_failure`, three `regression`, two
+`wrong_localization`, and one `api_behavior_misunderstanding`. One case recovered. The recovered
+case admitted no new file, versus 2.56 new files on average for non-recovered cases. This is
+descriptive, not relevant-file recall; ground-truth SWE-Explore annotations are still required
+for the preregistered mechanism metrics.
 
 ## Ablations
 
 | Condition | Resolved % | Recovery % | Localization delta | Avg tokens |
 |---|---:|---:|---:|---:|
+| Independent retry | PENDING | PENDING | — | PENDING |
+| ContextRepair | PENDING | PENDING | PENDING | PENDING |
+| ContextRepair without execution evidence | PENDING | PENDING | PENDING | PENDING |
 
 ## Failure analysis protocol
 
@@ -112,16 +117,31 @@ Record counts, representative trajectories, whether new relevant context was fou
 ## Evidence gates
 
 - M1: **met** — real-model trajectories, patches, provider usage, and executed tests are saved.
-- M2: **met** — 15 fresh public tasks completed in all three conditions after a separate pilot.
+- M2: **met** — 15 fresh tasks and 40 disjoint held-out tasks completed in all three conditions.
 - M3–M5: **met for system execution** — complete recovery loops, typed failure analyses,
-  new-only deltas, and two recoveries are included; extended case studies are future work.
+  new-only deltas, and two recoveries exist; manual case-study writeups remain pending.
 - M6: **not met** — no standardized localization annotation run has completed.
-- M7: **not met** — no frozen held-out 50-task subset has completed.
-- M8: **met at pilot scale, not publication scale** — the frozen fresh-15 benchmark completed;
-  a larger budget-bounded held-out run is future work.
+- M7: **partially met** — a frozen 40-task held-out subset completed; the original 50-task target
+  and publication-scale replication remain unfulfilled.
+- M8: **met at strong portfolio scale, not publication scale** — the 120-run held-out comparison
+  completed with full task artifacts and paired statistics.
 
-Every performance claim in this release points to its exact output file and evaluator run.
-Engineering claims describe implemented and verified infrastructure without implying an
-unsupported resolution-rate improvement.
+Resume performance claims must remain unwritten until M8. Any X/Y/Z claim must point to its
+exact output file and evaluator run; engineering claims may describe implemented and verified
+infrastructure without implying a resolution-rate improvement.
 
+## Resume-safe wording
 
+The current artifacts support a strong engineering/evaluation claim and an honest
+non-significant research result, not an improvement claim:
+
+> Built a failure-conditioned LLM coding-agent recovery system with typed failure analysis,
+> targeted repository re-exploration, Docker isolation, resumable spend caps, and provider-level
+> tracing across 120 held-out SWE-bench Verified evaluations.
+
+> Evaluated 40 held-out tasks across three controlled conditions (14.45M tokens); measured
+> 55.0% ContextRepair, 52.5% matched-budget Retry, and 55.0% Single resolution, reporting the
+> non-significant +2.5-point paired result honestly (exact McNemar p=1.0).
+
+For Cohere, use the two bullets above: they emphasize agent infrastructure, reproducible evals,
+matched controls, and statistical honesty without claiming that ContextRepair outperformed.

@@ -1,0 +1,19 @@
+{
+  "instance_id": "pydata__xarray-3151",
+  "condition": "retry",
+  "resolved": true,
+  "initial_resolved": true,
+  "recovery_attempted": false,
+  "recovered": false,
+  "final_attempt": "initial",
+  "recovery_error": null,
+  "model_calls": 10,
+  "input_tokens": 90360,
+  "output_tokens": 6304,
+  "total_tokens": 96664,
+  "cost_usd": 0.04807968,
+  "wall_seconds": 118.25,
+  "usage_estimated": false,
+  "patch_sha256": "27cdff65bf9625c1c70e034f328e3f71378e749636862fce38fa5a0b15ca83ab",
+  "finished_at": "2026-09-02T14:18:42.890186+00:00"
+}

@@ -18,26 +18,28 @@ flowchart LR
 
 ## Evidence status
 
-A fresh, locked **15-task benchmark** completed on 2026-09-02 after the five-task pipeline
-pilot. It used `deepseek-v4-flash`, temperature 0, provider-reported token usage, isolated
-SWE-bench task containers, and task-specific official evaluator commands. The subset excluded
-all pilot tasks and has checksum
-`808a76c2069da69a57e858ad372e9b15ad5d184eec4910cd8f0d507008160d42`.
+A locked **40-task held-out benchmark** completed on 2026-09-02 after separate five-task pilot
+and fresh-15 milestones. It contains 120/120 task-condition runs using `deepseek-v4-flash`,
+temperature 0, provider-reported token usage, isolated SWE-bench task containers, and
+task-specific official evaluator commands. The held-out subset excludes all earlier tasks and
+has checksum `1efc1c75bcdf286a9fcd579d05fc8375abfbf34952cccfbfa0325a960516f626`.
 
-| Method | Resolved | Recovery | Avg Tokens | Cost / Task |
-|---|---:|---:|---:|---:|
-| Single Attempt | 5/15 (33.3%) | — | 89,782 | $0.0467 |
-| Independent Retry | 9/15 (60.0%) | 2/8 (25.0%) | 132,434 | $0.0671 |
-| ContextRepair | 8/15 (53.3%) | 2/9 (22.2%) | 147,450 | $0.0738 |
+| Method | Resolved | Recovery | Avg Tokens | Cost / Task | Wilson 95% CI |
+|---|---:|---:|---:|---:|---:|
+| Single Attempt | 22/40 (55.0%) | — | 91,975 | $0.0480 | 39.8–69.3% |
+| Independent Retry | 21/40 (52.5%) | 3/22 (13.6%) | 133,464 | $0.0666 | 37.5–67.1% |
+| ContextRepair | 22/40 (55.0%) | 1/19 (5.3%) | 135,692 | $0.0680 | 39.8–69.3% |
 
-The 45 task-condition runs consumed 5,545,001 tokens and $2.8131 in completed-run cost
-($2.8405 including one interrupted call used to split the final condition across two workers).
-Against Retry, ContextRepair had one paired win, two paired losses, and twelve ties: a -6.7
-percentage-point final-resolution difference with exact McNemar p=1.0. It also used 11.3% more
-tokens and 10.1% more cost per task. The result does **not** support an improvement claim; it
-does provide a complete, auditable negative result and a strong systems/evaluation artifact.
-See [REPORT.md](REPORT.md) and
-[`results/benchmark-fresh15-v1/analysis.json`](results/benchmark-fresh15-v1/analysis.json).
+The 120 completed runs consumed 14,445,242 tokens and $7.3056; one interrupted Retry call
+raised total charged held-out cost to $7.3154. Against Retry, ContextRepair had two paired wins,
+one paired loss, and 37 ties: an observed **+2.5 percentage-point** difference with exact
+McNemar p=1.0. ContextRepair also used 1.7% more tokens and 2.1% more completed-run cost per
+task. The result does **not** support an improvement claim; it provides a complete, auditable
+systems/evaluation artifact. See [HELDOUT40_RESULTS.md](HELDOUT40_RESULTS.md), [REPORT.md](REPORT.md),
+and [`results/benchmark-heldout40-v1/statistics.json`](results/benchmark-heldout40-v1/statistics.json).
+
+The earlier fresh-15 milestone remains documented in [FRESH15_RESULTS.md](FRESH15_RESULTS.md)
+and is not pooled with the held-out rates.
 
 Ground-truth localization metrics remain pending because this benchmark did not include a pinned
 SWE-Explore annotation release.
@@ -140,8 +142,8 @@ contextrepair benchmark --subset benchmark_subsets/dev.json --tasks-file prepare
 Benchmark runs resume safely by default: completed tasks are skipped, interrupted task
 directories are archived before a clean retry, and `run_ledger.json` records completed plus
 interrupted API cost after every task. Use one shared results directory and add
-`--max-total-cost-usd 12.5` to enforce a conservative project-wide cost cap. The runner
-reserves the worst-case cost of the next task before starting it.
+`--max-total-cost-usd 12.5` to enforce a conservative project-wide cap of roughly CNY 100
+at 8 CNY/USD. The runner reserves the worst-case cost of the next task before starting it.
 
 4. Produce SWE-bench prediction JSONL and run the official harness:
 
@@ -216,13 +218,15 @@ The coding agent executes model-proposed shell commands. Run benchmark tasks ins
 
 Current limitations:
 
-- The fresh comparison contains 15 tasks, so its paired uncertainty remains wide; it supports
-  a pilot-scale benchmark and directional engineering conclusions, not a general model claim.
-- ContextRepair recovered two initial failures but did not outperform independent retry overall.
-- No standardized localization experiment or larger 40/50-task held-out run has completed.
+- The held-out comparison contains 40 tasks. It is a substantial portfolio benchmark, but its
+  intervals remain wide enough to prohibit a general model or publication-scale claim.
+- ContextRepair exceeded Retry by one task and matched Single, but the paired comparison is not
+  significant (exact McNemar p=1.0) and the recovery stage fixed only one initial failure.
+- No standardized localization-annotation experiment has completed, so mechanism-level
+  relevant-file or relevant-line recall remains unmeasured.
 - Prepared task environments are an external prerequisite; official SWE-bench scoring remains delegated to its maintained harness.
 - Token counts from providers that omit usage are estimates and clearly labeled.
 - The lightweight symbol/dependency extractor is Python-aware; other languages still receive file and region deltas.
 - Exactly one recovery cycle is supported by design.
 
-See [REPORT.md](REPORT.md) for the preregistered analysis plan and evidence gates.
+See [REPORT.md](REPORT.md) for the completed analysis and remaining evidence gates.

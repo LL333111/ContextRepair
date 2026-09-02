@@ -1,0 +1,55 @@
+{
+  "tasks": 40,
+  "conditions": {
+    "single": {
+      "resolved": 22,
+      "tasks": 40,
+      "resolved_pct": 55.0,
+      "wilson95_pct": [39.829091798932055, 69.29469218909507],
+      "total_tokens": 3679007,
+      "total_cost_usd": 1.92018596
+    },
+    "retry": {
+      "resolved": 21,
+      "tasks": 40,
+      "resolved_pct": 52.5,
+      "wilson95_pct": [37.49736210669248, 67.0645298873211],
+      "total_tokens": 5338549,
+      "total_cost_usd": 2.665047
+    },
+    "contextrepair": {
+      "resolved": 22,
+      "tasks": 40,
+      "resolved_pct": 55.0,
+      "wilson95_pct": [39.829091798932055, 69.29469218909507],
+      "total_tokens": 5427686,
+      "total_cost_usd": 2.7203308
+    }
+  },
+  "paired": {
+    "single_vs_retry": {
+      "both_resolved": 19,
+      "single_only": 3,
+      "retry_only": 2,
+      "neither_resolved": 16,
+      "difference_b_minus_a_percentage_points": -2.5,
+      "exact_mcnemar_two_sided_p": 1.0
+    },
+    "single_vs_contextrepair": {
+      "both_resolved": 21,
+      "single_only": 1,
+      "contextrepair_only": 1,
+      "neither_resolved": 17,
+      "difference_b_minus_a_percentage_points": 0.0,
+      "exact_mcnemar_two_sided_p": 1.0
+    },
+    "retry_vs_contextrepair": {
+      "both_resolved": 20,
+      "retry_only": 1,
+      "contextrepair_only": 2,
+      "neither_resolved": 17,
+      "difference_b_minus_a_percentage_points": 2.5,
+      "exact_mcnemar_two_sided_p": 1.0
+    }
+  }
+}

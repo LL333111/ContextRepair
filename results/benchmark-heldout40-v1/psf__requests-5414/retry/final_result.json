@@ -1,0 +1,19 @@
+{
+  "instance_id": "psf__requests-5414",
+  "condition": "retry",
+  "resolved": false,
+  "initial_resolved": false,
+  "recovery_attempted": true,
+  "recovered": false,
+  "final_attempt": "recovery",
+  "recovery_error": null,
+  "model_calls": 36,
+  "input_tokens": 155448,
+  "output_tokens": 16560,
+  "total_tokens": 172008,
+  "cost_usd": 0.09025632000000004,
+  "wall_seconds": 207.1720000000205,
+  "usage_estimated": false,
+  "patch_sha256": "fec2393b338ad5af5e2f6ebf79b41e74c3f7cd9a4b2271eb0661e7de60d7bb41",
+  "finished_at": "2026-09-02T14:16:43.485847+00:00"
+}

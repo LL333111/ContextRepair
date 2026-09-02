@@ -1,0 +1,19 @@
+{
+  "instance_id": "psf__requests-1766",
+  "condition": "contextrepair",
+  "resolved": false,
+  "initial_resolved": false,
+  "recovery_attempted": true,
+  "recovered": false,
+  "final_attempt": "recovery",
+  "recovery_error": null,
+  "model_calls": 24,
+  "input_tokens": 148701,
+  "output_tokens": 16494,
+  "total_tokens": 165195,
+  "cost_usd": 0.08720052000000002,
+  "wall_seconds": 233.0,
+  "usage_estimated": false,
+  "patch_sha256": "5149c0cb79f368db54d5a1f6890495ce86a9cd01419afd9be65c0efa6ddfebdb",
+  "finished_at": "2026-09-02T18:40:23.118994+00:00"
+}

@@ -1,15 +1,17 @@
 # Included Results
 
-This public snapshot includes only completed milestones:
+This public snapshot includes three completed milestones:
 
 - `benchmark-pilot-v1/`: five-task preliminary pipeline validation (15 runs)
-- `benchmark-fresh15-v1/`: fresh locked 15-task comparison (45 runs)
+- `benchmark-fresh15-v1/`: fresh locked 15-task comparison (45 full-trace runs)
+- `benchmark-heldout40-v1/`: locked 40-task comparison (120 final results)
 
-The fresh-15 directory is the result of record. It contains exactly 15 task directories, each
-with `single`, `retry`, and `contextrepair` final results, plus `analysis.json`. Local workspaces,
-repository mirrors, incomplete regressions, smoke tests, duplicated parallel-run roots, and any
-future larger held-out benchmark are intentionally excluded.
+The held-out directory is the primary result of record. It contains exactly 40 task directories,
+each with `single`, `retry`, and `contextrepair` final results, plus aggregate metrics, paired
+statistics, condition summaries, ledgers, and ContextRepair failure-analysis artifacts.
 
-Raw artifacts retain public task statements, model prompts/responses, code excerpts, patches,
-and evaluator output for auditability. Machine-specific paths have been replaced with public
-placeholders in this release copy.
+The fresh-15 directory retains full public model/evaluator traces for auditability. To keep the
+repository lightweight, the held-out release includes final results and analysis artifacts rather
+than duplicating all 120 model-call transcripts and test logs. The complete held-out traces remain
+in the local experiment archive. Local workspaces, repository mirrors, incomplete runs, smoke
+tests, and duplicated execution roots are excluded.

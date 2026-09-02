@@ -1,0 +1,58 @@
+{
+  "single": {
+    "tasks": 40,
+    "resolved": 22,
+    "resolved_pct": 55.0,
+    "initial_failures": 18,
+    "recovered": 0,
+    "recovery_pct": 0.0,
+    "avg_input_tokens": 83412.025,
+    "avg_output_tokens": 8563.15,
+    "avg_total_tokens": 91975.175,
+    "avg_cost_usd": 0.048004648999999996,
+    "cost_per_resolved_usd": 0.08728118,
+    "avg_wall_seconds": 337.8952500000014
+  },
+  "retry": {
+    "tasks": 40,
+    "resolved": 21,
+    "resolved_pct": 52.5,
+    "initial_failures": 22,
+    "recovered": 3,
+    "recovery_pct": 13.636363636363637,
+    "avg_input_tokens": 124484.025,
+    "avg_output_tokens": 8979.7,
+    "avg_total_tokens": 133463.725,
+    "avg_cost_usd": 0.066626175,
+    "cost_per_resolved_usd": 0.126907,
+    "avg_wall_seconds": 371.84847500000035
+  },
+  "contextrepair": {
+    "tasks": 40,
+    "resolved": 22,
+    "resolved_pct": 55.0,
+    "initial_failures": 19,
+    "recovered": 1,
+    "recovery_pct": 5.2631578947368425,
+    "avg_input_tokens": 126256.1,
+    "avg_output_tokens": 9436.05,
+    "avg_total_tokens": 135692.15,
+    "avg_cost_usd": 0.06800827000000001,
+    "cost_per_resolved_usd": 0.12365140000000001,
+    "avg_wall_seconds": 237.1610000000015
+  },
+  "failure_analysis": {
+    "failure_type_counts": {
+      "api_behavior_misunderstanding": 1,
+      "environment_test_failure": 4,
+      "incomplete_fix": 4,
+      "incorrect_causal_hypothesis": 5,
+      "regression": 3,
+      "wrong_localization": 2
+    },
+    "avg_new_files": {
+      "recovered": 0.0,
+      "not_recovered": 2.5555555555555554
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "failure_summary": "The test `test_combine_leaving_bystander_dimensions` fails because `combine_by_coords` raises a ValueError when a non-concatenated dimension (y) has non-monotonic coordinates, even though the coordinates are identical across datasets. The function incorrectly enforces monotonicity on all dimensions, including those that are not being concatenated.",
+  "failure_type": "incorrect_causal_hypothesis",
+  "contradicted_assumptions": [
+    "The documentation states that coordinate dimensions which do not vary between datasets are ignored, but the implementation still requires them to be monotonic.",
+    "The error message indicates that the function assumes all dimensions must have monotonic global indexes after combining, but this is only necessary for dimensions being concatenated."
+  ],
+  "missing_context_hypotheses": [
+    "The exact logic in `_combine_all_along_first_dim` or `_combine_1d` that determines which dimensions are checked for monotonicity is not fully visible.",
+    "The role of `_infer_concat_order_from_coords` in setting up the concatenation order and how it interacts with non-concatenated dimensions is unclear.",
+    "The specific code path that raises the ValueError (line 509 in combine.py) may be in a function that checks all dimensions, not just the concatenation dimension."
+  ],
+  "candidate_files": [
+    "xarray/core/combine.py"
+  ],
+  "candidate_symbols": [
+    "combine_by_coords",
+    "_combine_all_along_first_dim",
+    "_combine_1d",
+    "_infer_concat_order_from_coords"
+  ],
+  "search_actions": [
+    {
+      "action": "read",
+      "path": "xarray/core/combine.py",
+      "start_line": 480,
+      "end_line": 520
+    },
+    {
+      "action": "search",
+      "query": "monotonic",
+      "path": "xarray/core/combine.py"
+    },
+    {
+      "action": "search",
+      "query": "def _combine_all_along_first_dim",
+      "path": "xarray/core/combine.py"
+    },
+    {
+      "action": "search",
+      "query": "def _combine_1d",
+      "path": "xarray/core/combine.py"
+    }
+  ],
+  "priority": [
+    "high"
+  ],
+  "rationale": "The failure is directly reproducible and the issue is well-defined. The fix likely involves modifying the monotonicity check to only apply to dimensions being concatenated, which is a localized change in combine.py. The test failure is clear and the expected behavior is documented, making it a high-priority repair."
+}
