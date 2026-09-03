@@ -63,13 +63,3 @@ non-significant. ContextRepair matched Single and exceeded Retry by one task, wh
 slightly more tokens than Retry and recovering fewer initial failures. This is a useful
 engineering and evaluation result, not evidence that failure-conditioned re-exploration
 generally improves coding-agent resolution.
-
-## Resume-safe wording
-
-> Built a failure-conditioned LLM coding-agent recovery system with typed failure analysis,
-> targeted repository re-exploration, Docker isolation, resumable spend caps, and provider-level
-> tracing across 120 held-out SWE-bench Verified evaluations.
-
-> Evaluated 40 held-out tasks across three controlled conditions (14.45M tokens); measured
-> 55.0% ContextRepair, 52.5% matched-budget Retry, and 55.0% Single resolution, reporting the
-> non-significant +2.5-point paired result honestly (exact McNemar p=1.0).

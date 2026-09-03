@@ -125,23 +125,3 @@ Record counts, representative trajectories, whether new relevant context was fou
   and publication-scale replication remain unfulfilled.
 - M8: **met at strong portfolio scale, not publication scale** — the 120-run held-out comparison
   completed with full task artifacts and paired statistics.
-
-Resume performance claims must remain unwritten until M8. Any X/Y/Z claim must point to its
-exact output file and evaluator run; engineering claims may describe implemented and verified
-infrastructure without implying a resolution-rate improvement.
-
-## Resume-safe wording
-
-The current artifacts support a strong engineering/evaluation claim and an honest
-non-significant research result, not an improvement claim:
-
-> Built a failure-conditioned LLM coding-agent recovery system with typed failure analysis,
-> targeted repository re-exploration, Docker isolation, resumable spend caps, and provider-level
-> tracing across 120 held-out SWE-bench Verified evaluations.
-
-> Evaluated 40 held-out tasks across three controlled conditions (14.45M tokens); measured
-> 55.0% ContextRepair, 52.5% matched-budget Retry, and 55.0% Single resolution, reporting the
-> non-significant +2.5-point paired result honestly (exact McNemar p=1.0).
-
-For Cohere, use the two bullets above: they emphasize agent infrastructure, reproducible evals,
-matched controls, and statistical honesty without claiming that ContextRepair outperformed.
